@@ -1,5 +1,6 @@
 #include "MainWindow.h"
 #include "Page.h"
+#include <QFileDialog>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent)
@@ -59,5 +60,14 @@ void MainWindow::onRowSelected(bool selected)
 
 void MainWindow::onExport()
 {
+    if (_currentPage == 0)
+        return;
 
+    QString fileName = QFileDialog::getSaveFileName(this, tr("Export to File"),
+                                 ".",
+                                 tr("Comma-Separated Values (*.csv)"));
+    if (fileName.isEmpty())
+        return;
+
+    _currentPage->exportData(fileName);
 }

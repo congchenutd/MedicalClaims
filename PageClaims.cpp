@@ -3,8 +3,12 @@
 #include "DateDelegate.h"
 #include "DlgAttachment.h"
 #include <QDate>
+#include <QMetaEnum>
 #include <QSqlRelationalDelegate>
 #include <QSqlRelationalTableModel>
+#include <QTextStream>
+#include <QDebug>
+#include <QMessageBox>
 
 PageClaims::PageClaims(QWidget* parent) :
     PageDefault(parent)
@@ -52,6 +56,37 @@ void PageClaims::add()
         _model->setData(_model->index(lastRow, col), 0.0);
 
     ui.tableView->edit(_model->index(lastRow, COL_ID + 1));
+}
+
+void PageClaims::exportData(const QString& fileName)
+{
+    QFile file(fileName);
+    if (!file.open(QFile::WriteOnly | QFile::Truncate))
+    {
+        QMessageBox::critical(this, tr("Error"), tr("Unable to save to file %1").arg(fileName));
+        return;
+    }
+
+    QTextStream os(&file);
+
+    // Header
+    QStringList sections;
+    for (int col = 0; col < _model->columnCount(); ++col)
+        sections << _model->headerData(col, Qt::Horizontal).toString();
+    os << sections.join(", ") << "\n";
+
+    // Content
+    QSet<int> rows;
+    foreach (auto idx, ui.tableView->selectionModel()->selectedIndexes())
+        rows << idx.row();
+
+    foreach (auto row, rows)
+    {
+        QStringList sections;
+        for (int col = 0; col < _model->columnCount(); ++col)
+            sections << _model->data(_model->index(row, col)).toString();
+        os << sections.join(", ") << "\n";
+    }
 }
 
 void PageClaims::onSelectionChanged(const QItemSelection& selected)

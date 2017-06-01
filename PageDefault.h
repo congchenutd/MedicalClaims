@@ -14,6 +14,7 @@ public:
     void del();
     void save();
     void refresh();
+    void exportData(const QString& fileName);
 
 protected:
     explicit PageDefault(QWidget* parent = 0);

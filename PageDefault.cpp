@@ -39,9 +39,12 @@ void PageDefault::del()
     if (QMessageBox::warning(this, tr("Warning"), tr("Are you sure to delete the selected records?"),
                              QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes)
     {
-        QSet<QModelIndex> indexes = ui.tableView->selectionModel()->selectedIndexes().toSet();
-        foreach (const QModelIndex& idx, indexes)
-            _model->removeRow(idx.row());
+        QSet<int> rows;
+        foreach (auto idx, ui.tableView->selectionModel()->selectedIndexes())
+            rows << idx.row();
+
+        foreach (auto row, rows)
+            _model->removeRow(row);
         _model->select();
     }
 }
@@ -61,6 +64,10 @@ void PageDefault::save()
 
 void PageDefault::refresh() {
     _model->select();
+}
+
+void PageDefault::exportData(const QString& fileName) {
+    Q_UNUSED(fileName)
 }
 
 void PageDefault::onSelectionChanged(const QItemSelection& selected)
