@@ -8,16 +8,22 @@ PageDefault::PageDefault(QWidget* parent) :
     Page(parent)
 {
     ui.setupUi(this);
+    ui.widgetAttachments->hide();
 }
 
 void PageDefault::initModel(QSqlTableModel* model)
 {
     _model = model;
     _model->select();
+
     ui.tableView->setModel(_model);
     ui.tableView->hideColumn(COL_ID);
+    ui.tableView->resizeColumnsToContents();
 
-    connect(ui.tableView->selectionModel(), &QItemSelectionModel::currentRowChanged, this, &PageDefault::onCurrentRowChanged);
+    ui.splitter->setSizes(QList<int>() << 500 << 100);
+
+    connect(ui.tableView->selectionModel(), &QItemSelectionModel::selectionChanged,
+            this, &PageDefault::onSelectionChanged);
 }
 
 void PageDefault::add()
@@ -30,10 +36,14 @@ void PageDefault::add()
 
 void PageDefault::del()
 {
-    QSet<QModelIndex> indexes = ui.tableView->selectionModel()->selectedIndexes().toSet();
-    foreach (const QModelIndex& idx, indexes)
-        _model->removeRow(idx.row());
-    _model->select();
+    if (QMessageBox::warning(this, tr("Warning"), tr("Are you sure to delete the selected records?"),
+                             QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes)
+    {
+        QSet<QModelIndex> indexes = ui.tableView->selectionModel()->selectedIndexes().toSet();
+        foreach (const QModelIndex& idx, indexes)
+            _model->removeRow(idx.row());
+        _model->select();
+    }
 }
 
 void PageDefault::save()
@@ -53,7 +63,8 @@ void PageDefault::refresh() {
     _model->select();
 }
 
-void PageDefault::onCurrentRowChanged(const QModelIndex& idx)
+void PageDefault::onSelectionChanged(const QItemSelection& selected)
 {
-    emit currentRowValid(idx.isValid());
+    _currentRow = selected.isEmpty() ? -1 : selected.indexes().front().row();
+    emit currentRowValid(_currentRow > -1);
 }

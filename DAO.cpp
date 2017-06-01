@@ -59,6 +59,16 @@ void DAO::createTables()
                \'FSA Claimed\'      double, \
                \'HSA Claimed\'      double  \
                )");
+    query.exec("create table Attachment (   \
+               ID               int primary key,    \
+               Title            varchar,            \
+               \'File Path\'    varchar             \
+               )");
+    query.exec("create table ClaimAttachmentRelation ( \
+               ClaimID        int references Claim        (ID) on delete cascade on update cascade, \
+               AttachmentID   int references Attachment   (ID) on delete cascade on update cascade, \
+               primary key (ClaimID, AttachmentID) \
+               )");
 }
 
 int DAO::getNextID(const QString& tableName)
@@ -78,5 +88,31 @@ QList<int> DAO::getIDs(const QString& tableName) const
     query.exec(tr("select ID from %1 order by ID").arg(tableName));
     while (query.next())
         result << query.value(0).toInt();
+    return result;
+}
+
+void DAO::addAttachment(int claimID, const QString& title, const QString& filePath)
+{
+    int attachmentID = getNextID("Attachment");
+    QSqlQuery query;
+    query.prepare("insert into Attachment values (:id, :title, :filePath)");
+    query.bindValue(":id",          attachmentID);
+    query.bindValue(":title",       title);
+    query.bindValue(":filePath",    filePath);
+    query.exec();
+
+    query.exec(tr("insert into ClaimAttachmentRelation values (%1, %2)")
+               .arg(claimID).arg(attachmentID));
+}
+
+QList<QPair<QString, QString>> DAO::getAttachments(int claimID) const
+{
+    QList<QPair<QString, QString>> result;
+    QSqlQuery query;
+    query.exec(tr("select Title, \"File Path\" from Attachment, ClaimAttachmentRelation \
+                  where Claim.ID = ClaimAttachmentRelation.ClaimID and \
+                  Claim.ID = %1").arg(claimID));
+    while (query.next())
+        result << QPair<QString, QString>(query.value(0).toString(), query.value(1).toString());
     return result;
 }

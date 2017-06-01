@@ -18,6 +18,8 @@ private slots:
     void onAdd();
     void onDel();
     void onSave();
+    void onRowSelected(bool selected);
+    void onExport();
 
 private:
     Ui::MainWindow ui;

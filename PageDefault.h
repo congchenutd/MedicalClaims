@@ -20,7 +20,7 @@ protected:
     void initModel(QSqlTableModel* model);
 
 private slots:
-    void onCurrentRowChanged(const QModelIndex& idx);
+    void onSelectionChanged(const QItemSelection& selected);
 
 signals:
     void currentRowValid(bool);
@@ -28,6 +28,7 @@ signals:
 protected:
     Ui::PageDefault ui;
     QSqlTableModel* _model;
+    int             _currentRow;
 
     enum {COL_ID};
 };

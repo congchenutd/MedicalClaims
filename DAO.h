@@ -10,6 +10,8 @@ public:
     static DAO* getInstance();
     static int getNextID(const QString& tableName);
     QList<int> getIDs(const QString &tableName) const;
+    void addAttachment(int claimID, const QString& title, const QString& filePath);
+    QList<QPair<QString, QString>> getAttachments(int claimID) const;
 
 private:
     DAO();

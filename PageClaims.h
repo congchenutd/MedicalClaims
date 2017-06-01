@@ -2,7 +2,6 @@
 #define PAGECLAIMS_H
 
 #include "PageDefault.h"
-#include "ui_PageClaims.h"
 
 class PageClaims : public PageDefault
 {
@@ -12,6 +11,9 @@ public:
     explicit PageClaims(QWidget* parent = 0);
 
     void add();
+
+private slots:
+    void onSelectionChanged(const QItemSelection& selected);
 
 private:
     enum {COL_ID, COL_PATIENT, COL_PROVIDER, COL_SERVICE_START, COL_SERVICE_END,

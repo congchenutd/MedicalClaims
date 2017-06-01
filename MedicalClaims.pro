@@ -30,7 +30,9 @@ SOURCES +=\
     PagePatients.cpp \
     PageProviders.cpp \
     PageDefault.cpp \
-    DateDelegate.cpp
+    DateDelegate.cpp \
+    DlgAttachment.cpp \
+    WidgetAttachments.cpp
 
 HEADERS  += MainWindow.h \
     DAO.h \
@@ -39,13 +41,17 @@ HEADERS  += MainWindow.h \
     PagePatients.h \
     PageProviders.h \
     PageDefault.h \
-    DateDelegate.h
+    DateDelegate.h \
+    DlgAttachment.h \
+    WidgetAttachments.h
 
 FORMS    += MainWindow.ui \
-    PageClaims.ui \
-    PagePatients.ui \
-    PageProviders.ui \
-    PageDefault.ui
+    PageDefault.ui \
+    DlgAttachment.ui \
+    WidgetAttachments.ui
 
 RESOURCES += \
     Resources.qrc
+
+DISTFILES += \
+    TODO.txt
