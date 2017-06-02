@@ -1,6 +1,7 @@
 #include "MainWindow.h"
 #include "Page.h"
 #include <QFileDialog>
+#include <QMessageBox>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent)
@@ -16,6 +17,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui.actionDel,       &QAction::triggered, this, &MainWindow::onDel);
     connect(ui.actionSave,      &QAction::triggered, this, &MainWindow::onSave);
     connect(ui.actionExport,    &QAction::triggered, this, &MainWindow::onExport);
+    connect(ui.actionAbout,     &QAction::triggered, this, &MainWindow::onAbout);
 
     connect(ui.tabWidget, &QTabWidget   ::currentChanged,  this, &MainWindow::onCurrentTabChanged);
     connect(ui.tabClaims, &PageClaims   ::currentRowValid, this, &MainWindow::onRowSelected);
@@ -70,4 +72,13 @@ void MainWindow::onExport()
         return;
 
     _currentPage->exportData(fileName);
+}
+
+void MainWindow::onAbout()
+{
+    QMessageBox::about(this, "About",
+        tr("<h3><b>Medical Claims: A Medical Claims Manager</b></h3>"
+           "<p>Built on %1</p>"
+           "<p>Cong Chen &lt;<a href=mailto:CongChenUTD@Gmail.com>CongChenUTD@Gmail.com</a>&gt;</p>")
+                       .arg("06/01/2017"));
 }

@@ -55,3 +55,10 @@ RESOURCES += \
 
 DISTFILES += \
     TODO.txt
+
+win32 {
+	RC_FILE = Resources.rc
+}
+macx {
+	ICON = Images/Medical.icns
+}

@@ -20,6 +20,7 @@ private slots:
     void onSave();
     void onRowSelected(bool selected);
     void onExport();
+    void onAbout();
 
 private:
     Ui::MainWindow ui;

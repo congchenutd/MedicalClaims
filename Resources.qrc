@@ -6,5 +6,8 @@
         <file>Images/Options.png</file>
         <file>Images/Save.png</file>
         <file>Images/Export.png</file>
+        <file>Images/Medical.icns</file>
+        <file>Images/Medical.ico</file>
+        <file>Images/Medical.png</file>
     </qresource>
 </RCC>
