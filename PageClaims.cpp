@@ -4,6 +4,9 @@
 #include "DlgAttachment.h"
 #include "ClaimsModel.h"
 #include "MyResponsibilityDelegate.h"
+#include "PagePatients.h"
+#include "PageProviders.h"
+
 #include <QDate>
 #include <QMetaEnum>
 #include <QSqlRelationalDelegate>
@@ -22,8 +25,12 @@ PageClaims::PageClaims(QWidget* parent) :
 
     ui.tableView->setItemDelegateForColumn(ClaimsModel::COL_PATIENT,  new QSqlRelationalDelegate(ui.tableView));
     ui.tableView->setItemDelegateForColumn(ClaimsModel::COL_PROVIDER, new QSqlRelationalDelegate(ui.tableView));
-    ui.tableView->setItemDelegateForColumn(ClaimsModel::COL_SERVICE_START, new DateDelegate(ui.tableView));
+
+    auto delegateDateStart = new DateDelegate(ui.tableView);
+    ui.tableView->setItemDelegateForColumn(ClaimsModel::COL_SERVICE_START, delegateDateStart);
     ui.tableView->setItemDelegateForColumn(ClaimsModel::COL_SERVICE_END,   new DateDelegate(ui.tableView));
+
+    connect(delegateDateStart, &QItemDelegate::commitData, this, &PageClaims::updateServiceEnd);
 
     auto delegateNotCovered     = new MyResponsibilityDelegate(ui.tableView);
     auto delegateDeductible     = new MyResponsibilityDelegate(ui.tableView);
@@ -33,22 +40,14 @@ PageClaims::PageClaims(QWidget* parent) :
     ui.tableView->setItemDelegateForColumn(ClaimsModel::COL_DEDUCTIBLE,     delegateDeductible);
     ui.tableView->setItemDelegateForColumn(ClaimsModel::COL_COINSURANCE,    delegateDeductible);
 
-    connect(delegateNotCovered,     &QItemDelegate::commitData, this, &PageClaims::onDataChanged);
-    connect(delegateDeductible,     &QItemDelegate::commitData, this, &PageClaims::onDataChanged);
-    connect(delegateCoinsurance,    &QItemDelegate::commitData, this, &PageClaims::onDataChanged);
+    connect(delegateNotCovered,     &QItemDelegate::commitData, this, &PageClaims::updateMyResponsibility);
+    connect(delegateDeductible,     &QItemDelegate::commitData, this, &PageClaims::updateMyResponsibility);
+    connect(delegateCoinsurance,    &QItemDelegate::commitData, this, &PageClaims::updateMyResponsibility);
 
     ui.widgetAttachments->show();
 
     connect(ui.tableView->selectionModel(), &QItemSelectionModel::selectionChanged,
             this, &PageClaims::onSelectionChanged);
-}
-
-void PageClaims::add()
-{
-    int lastRow = _model->rowCount();
-    _model->insertRow(lastRow);
-    _model->initRow(lastRow);   // default data
-    ui.tableView->edit(_model->index(lastRow, COL_ID + 1));
 }
 
 void PageClaims::exportData(const QString& fileName)
@@ -82,17 +81,31 @@ void PageClaims::exportData(const QString& fileName)
     }
 }
 
+void PageClaims::initRow(int row) {
+    _model->initRow(row);
+}
+
+void PageClaims::copyRow(int sourceRow, int destinationRow) {
+    _model->copyRow(sourceRow, destinationRow);
+}
+
 void PageClaims::onSelectionChanged(const QItemSelection& selected)
 {
     int claimID = selected.isEmpty() ? -1 : _model->data(_model->index(_currentRow, COL_ID)).toInt();
     ui.widgetAttachments->setClaimID(claimID);
 }
 
-void PageClaims::onDataChanged()
+void PageClaims::updateMyResponsibility()
 {
     double notCovered   = _model->data(_model->index(_currentRow, ClaimsModel::COL_NOT_COVERED)).toDouble();
-    double deductible   = _model->data(_model->index(_currentRow, ClaimsModel::COL_DEDUCTIBLE)).toDouble();
+    double deductible   = _model->data(_model->index(_currentRow, ClaimsModel::COL_DEDUCTIBLE )).toDouble();
     double coinsurance  = _model->data(_model->index(_currentRow, ClaimsModel::COL_COINSURANCE)).toDouble();
     double myResponsibility = notCovered + deductible + coinsurance;
     _model->setData(_model->index(_currentRow, ClaimsModel::COL_MY_RESPONSIBILITY), myResponsibility);
+}
+
+void PageClaims::updateServiceEnd()
+{
+    QDate serviceStart = _model->data(_model->index(_currentRow, ClaimsModel::COL_SERVICE_START)).toDate();
+    _model->setData(_model->index(_currentRow, ClaimsModel::COL_SERVICE_END), serviceStart.toString("yyyy-MM-dd"));
 }

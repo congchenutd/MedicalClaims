@@ -31,4 +31,5 @@ void DateDelegate::setModelData(QWidget* editor, QAbstractItemModel* model, cons
     QDate date = dateEdit->date();
     model->setData(index, date.toString("yyyy-MM-dd"));
     model->submit();
+    emit dataCommited();
 }

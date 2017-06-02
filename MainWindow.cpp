@@ -9,8 +9,9 @@ MainWindow::MainWindow(QWidget *parent) :
     ui.setupUi(this);
     _currentPage = ui.tabClaims;
 
-    ui.actionDel    ->setEnabled(false);
-    ui.actionExport ->setEnabled(false);
+    ui.actionDel        ->setEnabled(false);
+    ui.actionExport     ->setEnabled(false);
+    ui.actionDuplicate  ->setEnabled(false);
 
     connect(ui.actionOptions,   &QAction::triggered, this, &MainWindow::onOptions);
     connect(ui.actionAdd,       &QAction::triggered, this, &MainWindow::onAdd);
@@ -18,6 +19,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui.actionSave,      &QAction::triggered, this, &MainWindow::onSave);
     connect(ui.actionExport,    &QAction::triggered, this, &MainWindow::onExport);
     connect(ui.actionAbout,     &QAction::triggered, this, &MainWindow::onAbout);
+    connect(ui.actionDuplicate, &QAction::triggered, this, &MainWindow::onDuplicate);
 
     connect(ui.tabWidget, &QTabWidget   ::currentChanged,  this, &MainWindow::onCurrentTabChanged);
     connect(ui.tabClaims, &PageClaims   ::currentRowValid, this, &MainWindow::onRowSelected);
@@ -56,8 +58,9 @@ void MainWindow::onSave()
 
 void MainWindow::onRowSelected(bool selected)
 {
-    ui.actionDel   ->setEnabled(selected);
-    ui.actionExport->setEnabled(selected);
+    ui.actionDel        ->setEnabled(selected);
+    ui.actionExport     ->setEnabled(selected);
+    ui.actionDuplicate  ->setEnabled(selected);
 }
 
 void MainWindow::onExport()
@@ -81,4 +84,10 @@ void MainWindow::onAbout()
            "<p>Built on %1</p>"
            "<p>Cong Chen &lt;<a href=mailto:CongChenUTD@Gmail.com>CongChenUTD@Gmail.com</a>&gt;</p>")
                        .arg("06/01/2017"));
+}
+
+void MainWindow::onDuplicate()
+{
+    if (_currentPage != 0)
+        _currentPage->duplicate();
 }

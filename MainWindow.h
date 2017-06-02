@@ -21,6 +21,7 @@ private slots:
     void onRowSelected(bool selected);
     void onExport();
     void onAbout();
+    void onDuplicate();
 
 private:
     Ui::MainWindow ui;

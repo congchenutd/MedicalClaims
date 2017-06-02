@@ -12,6 +12,8 @@ public:
 
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
     void initRow(int row);
+    QVariant foreignKeyValue(int row, int col, int foreignCol) const;
+    void copyRow(int sourceRow, int destinationRow);
 
 public:
     enum {

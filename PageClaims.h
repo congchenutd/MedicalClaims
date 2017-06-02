@@ -12,12 +12,16 @@ class PageClaims : public PageDefault
 public:
     explicit PageClaims(QWidget* parent = 0);
 
-    void add();
     void exportData(const QString& fileName);
+
+protected:
+    void initRow(int row);
+    void copyRow(int sourceRow, int destinationRow);
 
 private slots:
     void onSelectionChanged(const QItemSelection& selected);
-    void onDataChanged();
+    void updateMyResponsibility();
+    void updateServiceEnd();
 
 private:
     ClaimsModel* _model;

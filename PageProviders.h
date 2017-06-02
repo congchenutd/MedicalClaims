@@ -8,7 +8,7 @@ class PageProviders : public PageDefault
 public:
     explicit PageProviders(QWidget* parent = 0);
 
-private:
+public:
     enum {COL_ID, COL_NAME};
 };
 

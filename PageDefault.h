@@ -15,10 +15,13 @@ public:
     void save();
     void refresh();
     void exportData(const QString& fileName);
+    void duplicate();
 
 protected:
     explicit PageDefault(QWidget* parent = 0);
     void initModel(QSqlTableModel* model);
+    virtual void initRow(int row);
+    virtual void copyRow(int sourceRow, int destinationRow);
 
 private slots:
     void onSelectionChanged(const QItemSelection& selected);

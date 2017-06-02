@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>300</height>
+    <width>526</width>
+    <height>364</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -48,7 +48,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>400</width>
+     <width>526</width>
      <height>22</height>
     </rect>
    </property>
@@ -74,6 +74,7 @@
    <addaction name="actionDel"/>
    <addaction name="actionSave"/>
    <addaction name="separator"/>
+   <addaction name="actionDuplicate"/>
    <addaction name="actionExport"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
@@ -152,6 +153,18 @@
   <action name="actionAbout">
    <property name="text">
     <string>About</string>
+   </property>
+  </action>
+  <action name="actionDuplicate">
+   <property name="icon">
+    <iconset resource="Resources.qrc">
+     <normaloff>:/Images/Copy.png</normaloff>:/Images/Copy.png</iconset>
+   </property>
+   <property name="text">
+    <string>Duplicate</string>
+   </property>
+   <property name="toolTip">
+    <string>Duplicate selected rows</string>
    </property>
   </action>
  </widget>

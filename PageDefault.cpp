@@ -2,7 +2,6 @@
 #include "PageDefault.h"
 #include <QMessageBox>
 #include <QSqlError>
-#include <QDebug>
 
 PageDefault::PageDefault(QWidget* parent) :
     Page(parent)
@@ -30,8 +29,9 @@ void PageDefault::add()
 {
     int lastRow = _model->rowCount();
     _model->insertRow(lastRow);
-    _model->setData(_model->index(lastRow, COL_ID), DAO::getNextID(_model->tableName()));
-    ui.tableView->edit(_model->index(lastRow, COL_ID + 1));
+    initRow(lastRow);   // default data
+
+    ui.tableView->edit(_model->index(lastRow, COL_ID + 1)); // trigger editting
 }
 
 void PageDefault::del()
@@ -68,6 +68,32 @@ void PageDefault::refresh() {
 
 void PageDefault::exportData(const QString& fileName) {
     Q_UNUSED(fileName)
+}
+
+void PageDefault::duplicate()
+{
+    QSet<int> rows;
+    foreach (auto idx, ui.tableView->selectionModel()->selectedIndexes())
+        rows << idx.row();
+
+    foreach (auto row, rows)
+    {
+        int lastRow = _model->rowCount();
+        _model->insertRow(lastRow);
+        initRow(lastRow);
+        copyRow(row, lastRow);
+    }
+    _model->submit();
+}
+
+void PageDefault::initRow(int row) {
+    _model->setData(_model->index(row, COL_ID), DAO::getNextID(_model->tableName()));
+}
+
+void PageDefault::copyRow(int sourceRow, int destinationRow)
+{
+    for (int col = COL_ID + 1; col < _model->columnCount(); ++col)
+        _model->setData(_model->index(destinationRow, col), _model->data(_model->index(sourceRow, col)));
 }
 
 void PageDefault::onSelectionChanged(const QItemSelection& selected)

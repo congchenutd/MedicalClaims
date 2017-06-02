@@ -10,5 +10,7 @@
         <file>Images/Medical.ico</file>
         <file>Images/Medical.png</file>
         <file>Images/Check.png</file>
+        <file>Images/Copy.png</file>
+        <file>Images/Paste.png</file>
     </qresource>
 </RCC>

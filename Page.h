@@ -14,6 +14,7 @@ public:
     virtual void save() = 0;
     virtual void refresh() = 0;
     virtual void exportData(const QString& fileName) = 0;
+    virtual void duplicate() = 0;
 };
 
 #endif // PAGE_H

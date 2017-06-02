@@ -8,7 +8,7 @@ class PagePatients : public PageDefault
 public:
     explicit PagePatients(QWidget* parent = 0);
 
-private:
+public:
     enum {COL_ID, COL_NAME};
 };
 
