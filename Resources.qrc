@@ -9,5 +9,6 @@
         <file>Images/Medical.icns</file>
         <file>Images/Medical.ico</file>
         <file>Images/Medical.png</file>
+        <file>Images/Check.png</file>
     </qresource>
 </RCC>

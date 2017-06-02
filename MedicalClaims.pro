@@ -32,7 +32,9 @@ SOURCES +=\
     PageDefault.cpp \
     DateDelegate.cpp \
     DlgAttachment.cpp \
-    WidgetAttachments.cpp
+    WidgetAttachments.cpp \
+    ClaimsModel.cpp \
+    MyResponsibilityDelegate.cpp
 
 HEADERS  += MainWindow.h \
     DAO.h \
@@ -43,7 +45,9 @@ HEADERS  += MainWindow.h \
     PageDefault.h \
     DateDelegate.h \
     DlgAttachment.h \
-    WidgetAttachments.h
+    WidgetAttachments.h \
+    ClaimsModel.h \
+    MyResponsibilityDelegate.h
 
 FORMS    += MainWindow.ui \
     PageDefault.ui \

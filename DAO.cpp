@@ -47,18 +47,19 @@ void DAO::createTables()
                ID                   int primary key, \
                Patient              int references Patient (ID) on delete cascade on update cascade,  \
                Provider             int references Provider(ID) on delete cascade on update cascade,  \
-               Service              varchar,    \
-               \'Service Start\'    date,       \
-               \'Service End\'      date,       \
-               Billed               double,     \
-               Covered              double,     \
-               \'Insurance Paid\'   double,     \
-               \'Not Covered\'      double,     \
-               Deductible           double,     \
-               Coinsurance          double,     \
-               \'I Paid\'           double,     \
-               \'FSA Claimed\'      double,     \
-               \'HSA Claimed\'      double      \
+               Service                  varchar,    \
+               \'Service Start\'        date,       \
+               \'Service End\'          date,       \
+               Billed                   double,     \
+               Covered                  double,     \
+               \'Insurance Paid\'       double,     \
+               \'Not Covered\'          double,     \
+               Deductible               double,     \
+               Coinsurance              double,     \
+               \'My Responsibility\'    double,     \
+               \'I Paid\'               double,     \
+               \'FSA Claimed\'          double,     \
+               \'HSA Claimed\'          double      \
                )");
     query.exec("create table Attachment (   \
                ID               int primary key,    \
