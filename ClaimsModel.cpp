@@ -51,7 +51,7 @@ void ClaimsModel::initRow(int row)
 QVariant ClaimsModel::foreignKeyValue(int row, int col, int foreignCol) const
 {
     QString displayedValue = data(index(row, col)).toString();
-    QSqlTableModel* foreignModel = relationModel(ClaimsModel::COL_PATIENT);
+    QSqlTableModel* foreignModel = relationModel(col);
     if (foreignModel == 0)
         return displayedValue;
 
@@ -74,7 +74,7 @@ void ClaimsModel::copyRow(int sourceRow, int destinationRow)
     int patientID = foreignKeyValue(sourceRow, COL_PATIENT, PagePatients::COL_NAME).toInt();
     setData(index(destinationRow, COL_PATIENT), patientID);
 
-    int providerID = foreignKeyValue(sourceRow, COL_PATIENT, PageProviders::COL_NAME).toInt();
+    int providerID = foreignKeyValue(sourceRow, COL_PROVIDER, PageProviders::COL_NAME).toInt();
     setData(index(destinationRow, COL_PROVIDER), providerID);
 
     // copy the rest

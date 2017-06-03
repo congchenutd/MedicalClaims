@@ -48,6 +48,8 @@ PageClaims::PageClaims(QWidget* parent) :
 
     connect(ui.tableView->selectionModel(), &QItemSelectionModel::selectionChanged,
             this, &PageClaims::onSelectionChanged);
+
+    connect(ui.tableView, &TableViewClaims::attachmentDropped, ui.widgetAttachments, &WidgetAttachments::onDropAttachment);
 }
 
 void PageClaims::exportData(const QString& fileName)

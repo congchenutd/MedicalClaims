@@ -34,7 +34,8 @@ SOURCES +=\
     DlgAttachment.cpp \
     WidgetAttachments.cpp \
     ClaimsModel.cpp \
-    MyResponsibilityDelegate.cpp
+    MyResponsibilityDelegate.cpp \
+    TableViewClaims.cpp
 
 HEADERS  += MainWindow.h \
     DAO.h \
@@ -47,7 +48,8 @@ HEADERS  += MainWindow.h \
     DlgAttachment.h \
     WidgetAttachments.h \
     ClaimsModel.h \
-    MyResponsibilityDelegate.h
+    MyResponsibilityDelegate.h \
+    TableViewClaims.h
 
 FORMS    += MainWindow.ui \
     PageDefault.ui \

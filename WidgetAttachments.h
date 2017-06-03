@@ -14,6 +14,13 @@ public:
 
     void setClaimID(int claimID);
 
+public slots:
+    bool onDropAttachment(const QString& filePath);
+
+protected:
+    void dragEnterEvent(QDragEnterEvent*    event);
+    void dropEvent     (QDropEvent*         event);
+
 private slots:
     void onAdd();
     void onDel();
@@ -23,6 +30,7 @@ private slots:
 private:
     QString getAttachmentDir() const;
     void update();
+    void addFile(const QString& title, const QString& filePath);
 
 private:
     Ui::WidgetAttachments ui;

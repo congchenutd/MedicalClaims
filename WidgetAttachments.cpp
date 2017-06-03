@@ -5,11 +5,13 @@
 #include <QDir>
 #include <QDesktopServices>
 #include <QMessageBox>
+#include <QMimeData>
 
 WidgetAttachments::WidgetAttachments(QWidget *parent) :
     QWidget(parent), _attachmentDir("Attachments"), _emptyDir("Attachments/Empty")
 {
     ui.setupUi(this);
+    setAcceptDrops(true);
 
     QDir::current().mkdir(_attachmentDir);
     QDir::current().mkdir(_emptyDir);
@@ -32,18 +34,36 @@ void WidgetAttachments::setClaimID(int claimID)
 {
     _claimID = claimID;
     update();
+    setEnabled(_claimID > -1);
+}
+
+void WidgetAttachments::dragEnterEvent(QDragEnterEvent* event)
+{
+    if(event->mimeData()->hasUrls() && _claimID > 0)
+        event->acceptProposedAction();
+}
+
+void WidgetAttachments::dropEvent(QDropEvent* event)
+{
+    QUrl url = event->mimeData()->urls().front();
+    if (onDropAttachment(url.toLocalFile()))
+        event->accept();
 }
 
 void WidgetAttachments::onAdd()
 {
     DlgAttachment dlg(this);
     if (dlg.exec() == QDialog::Accepted)
-    {
-        QString dir = getAttachmentDir();
-        QString targetFilePath = dir + QDir::separator() + dlg.getTitle() + "." + QFileInfo(dlg.getFilePath()).suffix();
-        QFile::copy(dlg.getFilePath(), targetFilePath);
+        addFile(dlg.getTitle(), dlg.getFilePath());
+}
+
+void WidgetAttachments::addFile(const QString& title, const QString& filePath)
+{
+    QString dir = getAttachmentDir();
+    QDir::current().mkdir(dir);
+    QString targetFilePath = dir + QDir::separator() + title + "." + QFileInfo(filePath).suffix();
+    QFile::copy(filePath, targetFilePath);
 //        QFile::remove(dlg.getFilePath());
-    }
 }
 
 void WidgetAttachments::onDel()
@@ -68,6 +88,18 @@ void WidgetAttachments::onSelectionChanged(const QModelIndex& idx) {
     ui.btDel->setEnabled(idx.isValid());
 }
 
+bool WidgetAttachments::onDropAttachment(const QString& filePath)
+{
+    DlgAttachment dlg(this);
+    dlg.setFilePath(filePath);
+    if (dlg.exec() == QDialog::Accepted)
+    {
+        addFile(dlg.getTitle(), dlg.getFilePath());
+        return true;
+    }
+    return false;
+}
+
 QString WidgetAttachments::getAttachmentDir() const {
     return _claimID > 0 ? _attachmentDir + QDir::separator() + tr("%1").arg(_claimID)
                         : QString();
@@ -75,13 +107,12 @@ QString WidgetAttachments::getAttachmentDir() const {
 
 void WidgetAttachments::update()
 {
-    if (_claimID == -1)
+    QString dir = getAttachmentDir();
+    if (_claimID == -1 || !QDir(dir).exists())
     {
         ui.listView->setRootIndex(_model.index(_emptyDir));
         return;
     }
 
-    QString dir = getAttachmentDir();
-    QDir::current().mkdir(dir);
     ui.listView->setRootIndex(_model.index(dir));
 }

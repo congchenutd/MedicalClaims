@@ -1,5 +1,2 @@
 + Default value
 = On delete, set default
-+ Combine my responsibility and I Paid
-+ Auto calc my responsibility
-+ Copy-paste

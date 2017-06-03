@@ -1,5 +1,6 @@
 #include "DAO.h"
 #include "PageDefault.h"
+#include <QDragEnterEvent>
 #include <QMessageBox>
 #include <QSqlError>
 

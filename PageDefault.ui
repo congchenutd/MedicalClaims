@@ -31,7 +31,7 @@
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
-     <widget class="QTableView" name="tableView">
+     <widget class="TableViewClaims" name="tableView">
       <property name="sortingEnabled">
        <bool>true</bool>
       </property>
@@ -53,6 +53,11 @@
    <extends>QWidget</extends>
    <header>WidgetAttachments.h</header>
    <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>TableViewClaims</class>
+   <extends>QTableView</extends>
+   <header>TableViewClaims.h</header>
   </customwidget>
  </customwidgets>
  <resources/>
