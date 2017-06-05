@@ -30,7 +30,9 @@ private slots:
 private:
     QString getAttachmentDir() const;
     void update();
-    void addFile(const QString& title, const QString& filePath);
+    void addFile(const QString& title, const QString& sourceFilePath);
+    bool fileExists(const QString& dirPath, const QString& targetFilePath) const;
+    QString findDuplicatedFile(const QString& dir, const QString& sourceFilePath) const;
 
 private:
     Ui::WidgetAttachments ui;
