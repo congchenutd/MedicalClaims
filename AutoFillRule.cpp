@@ -48,7 +48,7 @@ AutoFillServiceEnd::AutoFillServiceEnd(QSqlTableModel* model)
     : AutoFillByCopy (model, ClaimsModel::COL_SERVICE_START, ClaimsModel::COL_SERVICE_END) {}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
-AutoFillIPaid::AutoFillIPaid(QSqlTableModel *model)
+AutoFillIPaid::AutoFillIPaid(QSqlTableModel* model)
     : AutoFillByCopy (model, ClaimsModel::COL_MY_RESPONSIBILITY, ClaimsModel::COL_I_PAID) {}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////

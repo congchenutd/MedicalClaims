@@ -16,17 +16,32 @@ ClaimsModel::ClaimsModel(QObject* parent)
     setHeaderData(COL_PROVIDER, Qt::Horizontal, tr("Provider"));
 }
 
-QVariant ClaimsModel::data(const QModelIndex& index, int role) const
+QVariant ClaimsModel::data(const QModelIndex& idx, int role) const
 {
-    if (!index.isValid())
+    if (!idx.isValid())
         return QVariant();
 
-//    if (role == Qt::DecorationRole && index.column() == COL_I_PAID)
-//    {
-//        return QIcon(":/Images/Check.png");
-//    }
+    if (role == Qt::TextColorRole)
+    {
+        if (idx.column() == COL_I_PAID)
+        {
+            double myResponsibility = data(index(idx.row(), COL_MY_RESPONSIBILITY)).toDouble();
+            double iPaid            = data(index(idx.row(), COL_I_PAID)).toDouble();
+            if (iPaid < myResponsibility)
+                return QColor(Qt::red);
+        }
 
-    return QSqlRelationalTableModel::data(index, role);
+        if (idx.column() == COL_FSA_CLAIMED || idx.column() == COL_HSA_CLAIMED)
+        {
+            double iPaid    = data(index(idx.row(), COL_I_PAID)).toDouble();
+            double fsa      = data(index(idx.row(), COL_FSA_CLAIMED)).toDouble();
+            double hsa      = data(index(idx.row(), COL_HSA_CLAIMED)).toDouble();
+            if (fsa + hsa < iPaid)
+                return QColor(Qt::red);
+        }
+    }
+
+    return QSqlRelationalTableModel::data(idx, role);
 }
 
 void ClaimsModel::initRow(int row)
