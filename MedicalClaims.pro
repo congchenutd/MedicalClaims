@@ -35,7 +35,8 @@ SOURCES +=\
     WidgetAttachments.cpp \
     ClaimsModel.cpp \
     MyResponsibilityDelegate.cpp \
-    TableViewClaims.cpp
+    TableViewClaims.cpp \
+    AutoFillRule.cpp
 
 HEADERS  += MainWindow.h \
     DAO.h \
@@ -49,7 +50,8 @@ HEADERS  += MainWindow.h \
     WidgetAttachments.h \
     ClaimsModel.h \
     MyResponsibilityDelegate.h \
-    TableViewClaims.h
+    TableViewClaims.h \
+    AutoFillRule.h
 
 FORMS    += MainWindow.ui \
     PageDefault.ui \

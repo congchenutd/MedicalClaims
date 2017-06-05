@@ -4,6 +4,7 @@
 #include "PageDefault.h"
 
 class ClaimsModel;
+class AutoFillRule;
 
 class PageClaims : public PageDefault
 {
@@ -13,6 +14,7 @@ public:
     explicit PageClaims(QWidget* parent = 0);
 
     void exportData(const QString& fileName);
+    void autoFill();
 
 protected:
     void initRow(int row);
@@ -20,11 +22,10 @@ protected:
 
 private slots:
     void onSelectionChanged(const QItemSelection& selected);
-    void updateMyResponsibility();
-    void updateServiceEnd();
 
 private:
     ClaimsModel* _model;
+    QMap<int, AutoFillRule*> _autoFillRules;
 };
 
 #endif // PAGECLAIMS_H

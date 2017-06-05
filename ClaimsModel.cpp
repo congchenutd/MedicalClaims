@@ -81,3 +81,10 @@ void ClaimsModel::copyRow(int sourceRow, int destinationRow)
     for (int col = ClaimsModel::COL_SERVICE; col < columnCount(); ++col)
         setData(index(destinationRow, col), data(index(sourceRow, col)));
 }
+
+bool ClaimsModel::select()
+{
+    relationModel(ClaimsModel::COL_PATIENT)->select();
+    relationModel(ClaimsModel::COL_PROVIDER)->select();
+    return QSqlRelationalTableModel::select();
+}

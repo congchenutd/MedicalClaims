@@ -15,6 +15,8 @@ public:
     QVariant foreignKeyValue(int row, int col, int foreignCol) const;
     void copyRow(int sourceRow, int destinationRow);
 
+    bool select() override;
+
 public:
     enum {
         COL_ID, COL_PATIENT, COL_PROVIDER, COL_SERVICE, COL_SERVICE_START, COL_SERVICE_END,

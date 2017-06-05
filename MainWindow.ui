@@ -76,6 +76,7 @@
    <addaction name="separator"/>
    <addaction name="actionDuplicate"/>
    <addaction name="actionExport"/>
+   <addaction name="actionAutoFill"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <action name="actionAdd">
@@ -165,6 +166,18 @@
    </property>
    <property name="toolTip">
     <string>Duplicate selected rows</string>
+   </property>
+  </action>
+  <action name="actionAutoFill">
+   <property name="icon">
+    <iconset resource="Resources.qrc">
+     <normaloff>:/Images/AutoFill.png</normaloff>:/Images/AutoFill.png</iconset>
+   </property>
+   <property name="text">
+    <string>Auto fill</string>
+   </property>
+   <property name="toolTip">
+    <string>Auto fill the selected cells</string>
    </property>
   </action>
  </widget>

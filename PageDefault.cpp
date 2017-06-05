@@ -40,11 +40,7 @@ void PageDefault::del()
     if (QMessageBox::warning(this, tr("Warning"), tr("Are you sure to delete the selected records?"),
                              QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes)
     {
-        QSet<int> rows;
-        foreach (auto idx, ui.tableView->selectionModel()->selectedIndexes())
-            rows << idx.row();
-
-        foreach (auto row, rows)
+        foreach (auto row, getSelectedRows())
             _model->removeRow(row);
         _model->select();
     }
@@ -73,11 +69,7 @@ void PageDefault::exportData(const QString& fileName) {
 
 void PageDefault::duplicate()
 {
-    QSet<int> rows;
-    foreach (auto idx, ui.tableView->selectionModel()->selectedIndexes())
-        rows << idx.row();
-
-    foreach (auto row, rows)
+    foreach (auto row, getSelectedRows())
     {
         int lastRow = _model->rowCount();
         _model->insertRow(lastRow);
@@ -87,6 +79,8 @@ void PageDefault::duplicate()
     _model->submit();
 }
 
+void PageDefault::autoFill() {}
+
 void PageDefault::initRow(int row) {
     _model->setData(_model->index(row, COL_ID), DAO::getNextID(_model->tableName()));
 }
@@ -95,6 +89,23 @@ void PageDefault::copyRow(int sourceRow, int destinationRow)
 {
     for (int col = COL_ID + 1; col < _model->columnCount(); ++col)
         _model->setData(_model->index(destinationRow, col), _model->data(_model->index(sourceRow, col)));
+}
+
+QList<int> PageDefault::getSelectedRows() const
+{
+    QSet<int> rows;
+    foreach (auto idx, ui.tableView->selectionModel()->selectedIndexes())
+        rows << idx.row();
+    QList<int> rowList = rows.toList();
+    std::sort(rowList.begin(), rowList.end());
+    return rowList;
+}
+
+QModelIndexList PageDefault::getSelectedIndexes() const
+{
+    QModelIndexList result = ui.tableView->selectionModel()->selectedIndexes();
+    std::sort(result.begin(), result.end());
+    return result;
 }
 
 void PageDefault::onSelectionChanged(const QItemSelection& selected)

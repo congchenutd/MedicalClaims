@@ -20,6 +20,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui.actionExport,    &QAction::triggered, this, &MainWindow::onExport);
     connect(ui.actionAbout,     &QAction::triggered, this, &MainWindow::onAbout);
     connect(ui.actionDuplicate, &QAction::triggered, this, &MainWindow::onDuplicate);
+    connect(ui.actionAutoFill,  &QAction::triggered, this, &MainWindow::onAutoFill);
 
     connect(ui.tabWidget, &QTabWidget   ::currentChanged,  this, &MainWindow::onCurrentTabChanged);
     connect(ui.tabClaims, &PageClaims   ::currentRowValid, this, &MainWindow::onRowSelected);
@@ -61,6 +62,7 @@ void MainWindow::onRowSelected(bool selected)
     ui.actionDel        ->setEnabled(selected);
     ui.actionExport     ->setEnabled(selected);
     ui.actionDuplicate  ->setEnabled(selected);
+    ui.actionAutoFill   ->setEnabled(selected);
 }
 
 void MainWindow::onExport()
@@ -83,11 +85,17 @@ void MainWindow::onAbout()
         tr("<h3><b>Medical Claims: A Medical Claims Manager</b></h3>"
            "<p>Built on %1</p>"
            "<p>Cong Chen &lt;<a href=mailto:CongChenUTD@Gmail.com>CongChenUTD@Gmail.com</a>&gt;</p>")
-                       .arg("06/02/2017"));
+                       .arg("06/05/2017"));
 }
 
 void MainWindow::onDuplicate()
 {
     if (_currentPage != 0)
         _currentPage->duplicate();
+}
+
+void MainWindow::onAutoFill()
+{
+    if (_currentPage != 0)
+        _currentPage->autoFill();
 }

@@ -22,6 +22,7 @@ private slots:
     void onExport();
     void onAbout();
     void onDuplicate();
+    void onAutoFill();
 
 private:
     Ui::MainWindow ui;

@@ -16,12 +16,16 @@ public:
     void refresh();
     void exportData(const QString& fileName);
     void duplicate();
+    void autoFill();
 
 protected:
     explicit PageDefault(QWidget* parent = 0);
     void initModel(QSqlTableModel* model);
     virtual void initRow(int row);
     virtual void copyRow(int sourceRow, int destinationRow);
+
+    QList<int> getSelectedRows() const;
+    QModelIndexList getSelectedIndexes() const;
 
 private slots:
     void onSelectionChanged(const QItemSelection& selected);
