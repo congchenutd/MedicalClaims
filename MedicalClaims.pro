@@ -36,7 +36,9 @@ SOURCES +=\
     ClaimsModel.cpp \
     MyResponsibilityDelegate.cpp \
     TableViewClaims.cpp \
-    AutoFillRule.cpp
+    AutoFillRule.cpp \
+    Settings.cpp \
+    DlgOptions.cpp
 
 HEADERS  += MainWindow.h \
     DAO.h \
@@ -51,12 +53,15 @@ HEADERS  += MainWindow.h \
     ClaimsModel.h \
     MyResponsibilityDelegate.h \
     TableViewClaims.h \
-    AutoFillRule.h
+    AutoFillRule.h \
+    Settings.h \
+    DlgOptions.h
 
 FORMS    += MainWindow.ui \
     PageDefault.ui \
     DlgAttachment.ui \
-    WidgetAttachments.ui
+    WidgetAttachments.ui \
+    DlgOptions.ui
 
 RESOURCES += \
     Resources.qrc

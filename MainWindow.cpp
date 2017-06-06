@@ -1,3 +1,4 @@
+#include "DlgOptions.h"
 #include "MainWindow.h"
 #include "Page.h"
 #include <QFileDialog>
@@ -12,6 +13,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui.actionDel        ->setEnabled(false);
     ui.actionExport     ->setEnabled(false);
     ui.actionDuplicate  ->setEnabled(false);
+    ui.actionAutoFill   ->setEnabled(false);
 
     connect(ui.actionOptions,   &QAction::triggered, this, &MainWindow::onOptions);
     connect(ui.actionAdd,       &QAction::triggered, this, &MainWindow::onAdd);
@@ -30,7 +32,11 @@ MainWindow::MainWindow(QWidget *parent) :
 
 void MainWindow::onOptions()
 {
-
+    DlgOptions dlg(this);
+    if (dlg.exec() == QDialog::Accepted)
+    {
+        ui.tabWidget->setFont(dlg.getTableFont());
+    }
 }
 
 void MainWindow::onCurrentTabChanged(int index)

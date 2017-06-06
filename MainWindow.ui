@@ -57,6 +57,7 @@
      <string>File</string>
     </property>
     <addaction name="actionAbout"/>
+    <addaction name="actionOptions"/>
    </widget>
    <addaction name="menuFile"/>
   </widget>
