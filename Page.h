@@ -16,6 +16,7 @@ public:
     virtual void exportData(const QString& fileName) = 0;
     virtual void duplicate() = 0;
     virtual void autoFill() = 0;
+    virtual void setShowFilter(bool show) = 0;
 };
 
 #endif // PAGE_H

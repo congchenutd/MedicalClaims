@@ -23,6 +23,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui.actionAbout,     &QAction::triggered, this, &MainWindow::onAbout);
     connect(ui.actionDuplicate, &QAction::triggered, this, &MainWindow::onDuplicate);
     connect(ui.actionAutoFill,  &QAction::triggered, this, &MainWindow::onAutoFill);
+    connect(ui.actionFilter,    &QAction::triggered, this, &MainWindow::onFilter);
 
     connect(ui.tabWidget, &QTabWidget   ::currentChanged,  this, &MainWindow::onCurrentTabChanged);
     connect(ui.tabClaims, &PageClaims   ::currentRowValid, this, &MainWindow::onRowSelected);
@@ -104,4 +105,12 @@ void MainWindow::onAutoFill()
 {
     if (_currentPage != 0)
         _currentPage->autoFill();
+}
+
+void MainWindow::onFilter(bool show)
+{
+    if (_currentPage != 0)
+    {
+        _currentPage->setShowFilter(show);
+    }
 }

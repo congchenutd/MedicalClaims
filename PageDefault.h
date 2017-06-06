@@ -17,6 +17,7 @@ public:
     void exportData(const QString& fileName);
     void duplicate();
     void autoFill();
+    void setShowFilter(bool show);
 
 protected:
     explicit PageDefault(QWidget* parent = 0);

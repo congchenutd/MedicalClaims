@@ -81,6 +81,8 @@ void PageDefault::duplicate()
 
 void PageDefault::autoFill() {}
 
+void PageDefault::setShowFilter(bool) {}
+
 void PageDefault::initRow(int row) {
     _model->setData(_model->index(row, COL_ID), DAO::getNextID(_model->tableName()));
 }

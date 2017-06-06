@@ -7,6 +7,7 @@
 #include "PagePatients.h"
 #include "PageProviders.h"
 #include "AutoFillRule.h"
+#include "FilterTableHeader.h"
 
 #include <QDate>
 #include <QMetaEnum>
@@ -22,20 +23,22 @@ PageClaims::PageClaims(QWidget* parent) :
     _model = new ClaimsModel(this);
     initModel(_model);
 
+    ui.tableView->setAcceptDrops(true);
     ui.tableView->sortByColumn(ClaimsModel::COL_SERVICE_START, Qt::DescendingOrder);
+    ui.tableView->getTableHeader()->generateFilters();
+    setShowFilter(false);
 
-    ui.tableView->setItemDelegateForColumn(ClaimsModel::COL_PATIENT,  new QSqlRelationalDelegate(ui.tableView));
-    ui.tableView->setItemDelegateForColumn(ClaimsModel::COL_PROVIDER, new QSqlRelationalDelegate(ui.tableView));
-
-    ui.tableView->setItemDelegateForColumn(ClaimsModel::COL_SERVICE_START, new DateDelegate(ui.tableView));
-    ui.tableView->setItemDelegateForColumn(ClaimsModel::COL_SERVICE_END,   new DateDelegate(ui.tableView));
+    ui.tableView->setItemDelegateForColumn(ClaimsModel::COL_PATIENT,        new QSqlRelationalDelegate(ui.tableView));
+    ui.tableView->setItemDelegateForColumn(ClaimsModel::COL_PROVIDER,       new QSqlRelationalDelegate(ui.tableView));
+    ui.tableView->setItemDelegateForColumn(ClaimsModel::COL_SERVICE_START,  new DateDelegate(ui.tableView));
+    ui.tableView->setItemDelegateForColumn(ClaimsModel::COL_SERVICE_END,    new DateDelegate(ui.tableView));
 
     ui.widgetAttachments->show();
 
     connect(ui.tableView->selectionModel(), &QItemSelectionModel::selectionChanged,
             this, &PageClaims::onSelectionChanged);
 
-    connect(ui.tableView, &TableViewClaims::attachmentDropped, ui.widgetAttachments, &WidgetAttachments::onDropAttachment);
+    connect(ui.tableView, &FilterableTableView::attachmentDropped, ui.widgetAttachments, &WidgetAttachments::onDropAttachment);
 
     _autoFillRules.insert(ClaimsModel::COL_MY_RESPONSIBILITY,   new AutoFillMyResponsibility(_model));
     _autoFillRules.insert(ClaimsModel::COL_SERVICE_END,         new AutoFillServiceEnd(_model));
@@ -76,6 +79,14 @@ void PageClaims::autoFill()
     foreach (auto index, getSelectedIndexes())
         if (AutoFillRule* autoFill = _autoFillRules[index.column()])
             autoFill->apply(index.row());
+}
+
+void PageClaims::setShowFilter(bool show) {
+    ui.tableView->setShowFilter(show);
+
+    // UGLY: force layout update to show/hide the filters
+    adjustSize();
+    layout()->update();
 }
 
 void PageClaims::initRow(int row) {

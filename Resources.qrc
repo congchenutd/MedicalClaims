@@ -13,5 +13,6 @@
         <file>Images/Copy.png</file>
         <file>Images/Paste.png</file>
         <file>Images/AutoFill.png</file>
+        <file>Images/Filter.png</file>
     </qresource>
 </RCC>

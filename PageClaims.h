@@ -15,6 +15,7 @@ public:
 
     void exportData(const QString& fileName);
     void autoFill();
+    void setShowFilter(bool show);
 
 protected:
     void initRow(int row);

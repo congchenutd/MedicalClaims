@@ -23,6 +23,7 @@ private slots:
     void onAbout();
     void onDuplicate();
     void onAutoFill();
+    void onFilter(bool show);
 
 private:
     Ui::MainWindow ui;

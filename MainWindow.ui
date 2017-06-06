@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>526</width>
+    <width>657</width>
     <height>364</height>
    </rect>
   </property>
@@ -48,7 +48,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>526</width>
+     <width>657</width>
      <height>22</height>
     </rect>
    </property>
@@ -62,6 +62,9 @@
    <addaction name="menuFile"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
+   <property name="toolButtonStyle">
+    <enum>Qt::ToolButtonTextUnderIcon</enum>
+   </property>
    <attribute name="toolBarArea">
     <enum>TopToolBarArea</enum>
    </attribute>
@@ -78,6 +81,7 @@
    <addaction name="actionDuplicate"/>
    <addaction name="actionExport"/>
    <addaction name="actionAutoFill"/>
+   <addaction name="actionFilter"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <action name="actionAdd">
@@ -179,6 +183,24 @@
    </property>
    <property name="toolTip">
     <string>Auto fill the selected cells</string>
+   </property>
+  </action>
+  <action name="actionFilter">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="Resources.qrc">
+     <normaloff>:/Images/Filter.png</normaloff>:/Images/Filter.png</iconset>
+   </property>
+   <property name="text">
+    <string>Filter</string>
+   </property>
+   <property name="toolTip">
+    <string>Filter</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+F</string>
    </property>
   </action>
  </widget>
