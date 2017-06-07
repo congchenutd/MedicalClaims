@@ -5,6 +5,6 @@ PageProviders::PageProviders(QWidget* parent) :
 {
     QSqlTableModel* model = new QSqlTableModel;
     model->setTable("Provider");
-    initModel(model);
+    setModel(model);
     ui.tableView->sortByColumn(COL_NAME, Qt::AscendingOrder);
 }

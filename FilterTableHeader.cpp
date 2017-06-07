@@ -14,9 +14,9 @@ FilterTableHeader::FilterTableHeader(QTableView* parent) :
     setSortIndicatorShown(true);
 
     // Do some connects: Basically just resize and reposition the input widgets whenever anything changes
-    connect(this, SIGNAL(sectionResized(int,int,int)), this, SLOT(adjustPositions()));
+    connect(this, SIGNAL(sectionResized(int, int, int)), this, SLOT(adjustPositions()));
     connect(parent->horizontalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(adjustPositions()));
-    connect(parent->verticalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(adjustPositions()));
+    connect(parent->verticalScrollBar(),   SIGNAL(valueChanged(int)), this, SLOT(adjustPositions()));
 }
 
 void FilterTableHeader::generateFilters()
@@ -25,7 +25,7 @@ void FilterTableHeader::generateFilters()
     {
         FilterLineEdit* filter = new FilterLineEdit(i, this);
         filter->show();
-//        connect(l, SIGNAL(delayedTextChanged(QString)), this, SLOT(inputChanged(QString)));
+        connect(filter, &FilterLineEdit::textEdited, this, &FilterTableHeader::filterChanged);
         _filterLineEdits << filter;
     }
 
@@ -73,12 +73,6 @@ void FilterTableHeader::adjustPositions()
         w->move(sectionPosition(i) - offset(), w->sizeHint().height() + 2);
         w->resize(sectionSize(i), w->sizeHint().height());
     }
-}
-
-void FilterTableHeader::inputChanged(const QString& new_value)
-{
-    // Just get the column number and the new value and send them to anybody interested in filter changes
-    emit filterChanged(sender()->property("column").toInt(), new_value);
 }
 
 void FilterTableHeader::clearFilters()

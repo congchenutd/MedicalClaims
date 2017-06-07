@@ -24,13 +24,10 @@ public slots:
     void setFilter(int column, const QString& value);
 
 signals:
-    void filterChanged(int column, QString value);
+    void filterChanged(int column, const QString& text);
 
 protected:
     virtual void updateGeometries();
-
-private slots:
-    void inputChanged(const QString& new_value);
 
 private:
     QList<FilterLineEdit*> _filterLineEdits;

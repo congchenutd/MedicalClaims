@@ -21,7 +21,7 @@ public:
 
 protected:
     explicit PageDefault(QWidget* parent = 0);
-    void initModel(QSqlTableModel* model);
+    void setModel(QSqlTableModel* model);
     virtual void initRow(int row);
     virtual void copyRow(int sourceRow, int destinationRow);
 

@@ -11,7 +11,7 @@ PageDefault::PageDefault(QWidget* parent) :
     ui.widgetAttachments->hide();
 }
 
-void PageDefault::initModel(QSqlTableModel* model)
+void PageDefault::setModel(QSqlTableModel* model)
 {
     _model = model;
     _model->select();

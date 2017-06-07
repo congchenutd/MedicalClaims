@@ -9,6 +9,6 @@ PagePatients::PagePatients(QWidget* parent) :
 {
     QSqlTableModel* model = new QSqlTableModel;
     model->setTable("Patient");
-    initModel(model);
+    setModel(model);
     ui.tableView->sortByColumn(COL_NAME, Qt::AscendingOrder);
 }

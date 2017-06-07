@@ -21,7 +21,7 @@ PageClaims::PageClaims(QWidget* parent) :
     PageDefault(parent)
 {
     _model = new ClaimsModel(this);
-    initModel(_model);
+    setModel(_model);
 
     ui.tableView->setAcceptDrops(true);
     ui.tableView->sortByColumn(ClaimsModel::COL_SERVICE_START, Qt::DescendingOrder);
@@ -39,6 +39,8 @@ PageClaims::PageClaims(QWidget* parent) :
             this, &PageClaims::onSelectionChanged);
 
     connect(ui.tableView, &FilterableTableView::attachmentDropped, ui.widgetAttachments, &WidgetAttachments::onDropAttachment);
+
+    connect(ui.tableView->getTableHeader(), &FilterTableHeader::filterChanged, this, &PageClaims::onFilterChanged);
 
     _autoFillRules.insert(ClaimsModel::COL_MY_RESPONSIBILITY,   new AutoFillMyResponsibility(_model));
     _autoFillRules.insert(ClaimsModel::COL_SERVICE_END,         new AutoFillServiceEnd(_model));
@@ -101,4 +103,13 @@ void PageClaims::onSelectionChanged(const QItemSelection& selected)
 {
     int claimID = selected.isEmpty() ? -1 : _model->data(_model->index(_currentRow, COL_ID)).toInt();
     ui.widgetAttachments->setClaimID(claimID);
+}
+
+void PageClaims::onFilterChanged(int column, const QString &filterValue)
+{
+    qDebug() << _model->filter();
+    if (filterValue.isEmpty())
+        _model->setFilter(filterValue);
+    else
+        _model->setFilter(tr("\"%1\" LIKE \"%%2%\"").arg(_model->headerData(column, Qt::Horizontal).toString()).arg(filterValue));
 }

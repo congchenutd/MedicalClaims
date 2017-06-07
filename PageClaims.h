@@ -23,6 +23,7 @@ protected:
 
 private slots:
     void onSelectionChanged(const QItemSelection& selected);
+    void onFilterChanged(int column, const QString& filterValue);
 
 private:
     ClaimsModel* _model;
