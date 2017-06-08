@@ -16,40 +16,40 @@ SOURCES +=\
     Main.cpp \
     DAO.cpp \
     Page.cpp \
-    PageClaims.cpp \
     PagePatients.cpp \
     PageProviders.cpp \
     PageDefault.cpp \
     DateDelegate.cpp \
     DlgAttachment.cpp \
     WidgetAttachments.cpp \
-    ClaimsModel.cpp \
     MyResponsibilityDelegate.cpp \
     AutoFillRule.cpp \
     Settings.cpp \
     DlgOptions.cpp \
     FilterableTableView.cpp \
     FilterTableHeader.cpp \
-    FilterLineEdit.cpp
+    FilterLineEdit.cpp \
+    PageExpenses.cpp \
+    ExpensesModel.cpp
 
 HEADERS  += MainWindow.h \
     DAO.h \
     Page.h \
-    PageClaims.h \
     PagePatients.h \
     PageProviders.h \
     PageDefault.h \
     DateDelegate.h \
     DlgAttachment.h \
     WidgetAttachments.h \
-    ClaimsModel.h \
     MyResponsibilityDelegate.h \
     AutoFillRule.h \
     Settings.h \
     DlgOptions.h \
     FilterTableHeader.h \
     FilterableTableView.h \
-    FilterLineEdit.h
+    FilterLineEdit.h \
+    PageExpenses.h \
+    ExpensesModel.h
 
 FORMS    += MainWindow.ui \
     PageDefault.ui \

@@ -84,7 +84,7 @@ void PageDefault::autoFill() {}
 
 void PageDefault::setShowFilter(bool) {}
 
-double PageDefault::sumUp() const
+double PageDefault::sumUpSelected() const
 {
     double result = 0;
     foreach (auto index, getSelectedIndexes())

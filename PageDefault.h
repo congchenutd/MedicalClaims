@@ -18,7 +18,7 @@ public:
     void duplicate();
     void autoFill();
     void setShowFilter(bool show);
-    double sumUp() const;
+    double sumUpSelected() const;
 
 protected:
     explicit PageDefault(QWidget* parent = 0);

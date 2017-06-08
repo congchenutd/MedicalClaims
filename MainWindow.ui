@@ -24,9 +24,9 @@
       <property name="currentIndex">
        <number>0</number>
       </property>
-      <widget class="PageClaims" name="tabClaims">
+      <widget class="PageExpenses" name="tabExpenses">
        <attribute name="title">
-        <string>Claims</string>
+        <string>Expenses</string>
        </attribute>
       </widget>
       <widget class="PagePatients" name="tabPatients">
@@ -79,9 +79,9 @@
    <addaction name="actionSave"/>
    <addaction name="separator"/>
    <addaction name="actionDuplicate"/>
-   <addaction name="actionExport"/>
    <addaction name="actionAutoFill"/>
    <addaction name="actionFilter"/>
+   <addaction name="actionExport"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <action name="actionAdd">
@@ -90,7 +90,7 @@
      <normaloff>:/Images/Add.png</normaloff>:/Images/Add.png</iconset>
    </property>
    <property name="text">
-    <string>Add record</string>
+    <string>Add</string>
    </property>
    <property name="toolTip">
     <string>Add record</string>
@@ -114,7 +114,7 @@
      <normaloff>:/Images/Minus.png</normaloff>:/Images/Minus.png</iconset>
    </property>
    <property name="text">
-    <string>Delete record</string>
+    <string>Delete</string>
    </property>
    <property name="toolTip">
     <string>Delete record</string>
@@ -207,12 +207,6 @@
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
   <customwidget>
-   <class>PageClaims</class>
-   <extends>QWidget</extends>
-   <header>PageClaims.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
    <class>PagePatients</class>
    <extends>QWidget</extends>
    <header>PagePatients.h</header>
@@ -222,6 +216,12 @@
    <class>PageProviders</class>
    <extends>QWidget</extends>
    <header>PageProviders.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>PageExpenses</class>
+   <extends>QWidget</extends>
+   <header>PageExpenses.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

@@ -1,4 +1,4 @@
-#include "ClaimsModel.h"
+#include "ExpensesModel.h"
 #include "DAO.h"
 #include "PagePatients.h"
 #include "PageProviders.h"
@@ -6,17 +6,17 @@
 #include <QDate>
 #include <QIcon>
 
-ClaimsModel::ClaimsModel(QObject* parent)
+ExpensesModel::ExpensesModel(QObject* parent)
     : QSqlRelationalTableModel(parent)
 {
-    setTable("Claim");
+    setTable("Expense");
     setRelation(COL_PATIENT,    QSqlRelation("Patient",  "ID", "Name"));
     setRelation(COL_PROVIDER,   QSqlRelation("Provider", "ID", "Name"));
     setHeaderData(COL_PATIENT,  Qt::Horizontal, tr("Patient"));
     setHeaderData(COL_PROVIDER, Qt::Horizontal, tr("Provider"));
 }
 
-QVariant ClaimsModel::data(const QModelIndex& idx, int role) const
+QVariant ExpensesModel::data(const QModelIndex& idx, int role) const
 {
     if (!idx.isValid())
         return QVariant();
@@ -44,7 +44,7 @@ QVariant ClaimsModel::data(const QModelIndex& idx, int role) const
     return QSqlRelationalTableModel::data(idx, role);
 }
 
-void ClaimsModel::initRow(int row)
+void ExpensesModel::initRow(int row)
 {
     setData(index(row, COL_ID), DAO::getNextID(tableName()));
 
@@ -59,11 +59,11 @@ void ClaimsModel::initRow(int row)
     setData(index(row, COL_SERVICE_START),  QDate::currentDate());
     setData(index(row, COL_SERVICE_END),    QDate::currentDate());
 
-    for (int col = COL_BILLED; col <= COL_HSA_CLAIMED; ++col)
+    for (int col = COL_BILLED; col < rowCount(); ++col)
         setData(index(row, col), 0.0);
 }
 
-QVariant ClaimsModel::foreignKeyValue(int row, int col, int foreignCol) const
+QVariant ExpensesModel::foreignKeyValue(int row, int col, int foreignCol) const
 {
     QString displayedValue = data(index(row, col)).toString();
     QSqlTableModel* foreignModel = relationModel(col);
@@ -83,7 +83,7 @@ QVariant ClaimsModel::foreignKeyValue(int row, int col, int foreignCol) const
     return displayedValue;
 }
 
-void ClaimsModel::copyRow(int sourceRow, int destinationRow)
+void ExpensesModel::copyRow(int sourceRow, int destinationRow)
 {
     // copy foreign keys
     int patientID = foreignKeyValue(sourceRow, COL_PATIENT, PagePatients::COL_NAME).toInt();
@@ -93,18 +93,18 @@ void ClaimsModel::copyRow(int sourceRow, int destinationRow)
     setData(index(destinationRow, COL_PROVIDER), providerID);
 
     // copy the rest
-    for (int col = ClaimsModel::COL_SERVICE; col < columnCount(); ++col)
+    for (int col = ExpensesModel::COL_SERVICE; col < columnCount(); ++col)
         setData(index(destinationRow, col), data(index(sourceRow, col)));
 }
 
-bool ClaimsModel::select()
+bool ExpensesModel::select()
 {
-    relationModel(ClaimsModel::COL_PATIENT)->select();
-    relationModel(ClaimsModel::COL_PROVIDER)->select();
+    relationModel(ExpensesModel::COL_PATIENT)->select();
+    relationModel(ExpensesModel::COL_PROVIDER)->select();
     return QSqlRelationalTableModel::select();
 }
 
-void ClaimsModel::filterData(int column, const QString& filter)
+void ExpensesModel::filterData(int column, const QString& filter)
 {
     // clear filter and reset model
     if (filter.isEmpty())

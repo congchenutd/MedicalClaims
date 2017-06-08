@@ -3,15 +3,15 @@
 
 #include "PageDefault.h"
 
-class ClaimsModel;
+class ExpensesModel;
 class AutoFillRule;
 
-class PageClaims : public PageDefault
+class PageExpenses : public PageDefault
 {
     Q_OBJECT
 
 public:
-    explicit PageClaims(QWidget* parent = 0);
+    explicit PageExpenses(QWidget* parent = 0);
 
     void exportData(const QString& fileName);
     void autoFill();
@@ -25,7 +25,7 @@ private slots:
     void onFilterChanged(int column, const QString& filterValue);
 
 private:
-    ClaimsModel* _model;
+    ExpensesModel* _model;
     QMap<int, AutoFillRule*> _autoFillRules;
 };
 

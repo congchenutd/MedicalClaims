@@ -43,7 +43,7 @@ void DAO::createTables()
                ID          int primary key, \
                Name        varchar unique   \
                )");
-    query.exec("create table Claim ( \
+    query.exec("create table Expense ( \
                ID                   int primary key, \
                Patient              int references Patient (ID) on delete cascade on update cascade,  \
                Provider             int references Provider(ID) on delete cascade on update cascade,  \

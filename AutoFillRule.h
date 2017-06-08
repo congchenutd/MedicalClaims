@@ -57,4 +57,11 @@ public:
     AutoFillHSA(QSqlTableModel* model);
 };
 
+class AutoFillTaxable: public AutoFillRule
+{
+public:
+    AutoFillTaxable(QSqlTableModel* model);
+    void apply(int row) override;
+};
+
 #endif // AUTOFILLRULE_H

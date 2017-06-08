@@ -9,7 +9,7 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent)
 {
     ui.setupUi(this);
-    _currentPage = ui.tabClaims;
+    _currentPage = ui.tabExpenses;
 
     ui.actionDel        ->setEnabled(false);
     ui.actionExport     ->setEnabled(false);
@@ -29,10 +29,10 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui.actionAutoFill,  &QAction::triggered, this, &MainWindow::onAutoFill);
     connect(ui.actionFilter,    &QAction::triggered, this, &MainWindow::onFilter);
 
-    connect(ui.tabWidget, &QTabWidget   ::currentChanged,  this, &MainWindow::onCurrentTabChanged);
-    connect(ui.tabClaims, &PageClaims   ::selectionChanged, this, &MainWindow::onSelectionChanged);
-    connect(ui.tabClaims, &PagePatients ::selectionChanged, this, &MainWindow::onSelectionChanged);
-    connect(ui.tabClaims, &PageProviders::selectionChanged, this, &MainWindow::onSelectionChanged);
+    connect(ui.tabWidget,       &QTabWidget   ::currentChanged,   this, &MainWindow::onCurrentTabChanged);
+    connect(ui.tabExpenses,     &PageExpenses   ::selectionChanged, this, &MainWindow::onSelectionChanged);
+    connect(ui.tabPatients,     &PagePatients ::selectionChanged, this, &MainWindow::onSelectionChanged);
+    connect(ui.tabProviders,    &PageProviders::selectionChanged, this, &MainWindow::onSelectionChanged);
 }
 
 void MainWindow::onOptions()
@@ -75,7 +75,7 @@ void MainWindow::onSelectionChanged(const QModelIndexList& selected)
     ui.actionDuplicate  ->setEnabled(!selected.isEmpty());
     ui.actionAutoFill   ->setEnabled(!selected.isEmpty());
 
-    statusBar()->showMessage(tr("Sum = %1").arg(_currentPage->sumUp()));
+    statusBar()->showMessage(tr("    Sum = %1").arg(_currentPage->sumUpSelected()));
 }
 
 void MainWindow::onExport()

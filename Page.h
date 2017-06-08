@@ -17,7 +17,7 @@ public:
     virtual void duplicate() = 0;
     virtual void autoFill() = 0;
     virtual void setShowFilter(bool show) = 0;
-    virtual double sumUp() const = 0;
+    virtual double sumUpSelected() const = 0;
 };
 
 #endif // PAGE_H

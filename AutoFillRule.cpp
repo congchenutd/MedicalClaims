@@ -1,5 +1,5 @@
 #include "AutoFillRule.h"
-#include "ClaimsModel.h"
+#include "ExpensesModel.h"
 #include <QSqlTableModel>
 #include <QDate>
 
@@ -14,18 +14,18 @@ AutoFillMyResponsibility::AutoFillMyResponsibility(QSqlTableModel* model)
 
 void AutoFillMyResponsibility::apply(int row)
 {
-    double notCovered   = _model->data(_model->index(row, ClaimsModel::COL_NOT_COVERED)).toDouble();
-    double deductible   = _model->data(_model->index(row, ClaimsModel::COL_DEDUCTIBLE )).toDouble();
-    double coinsurance  = _model->data(_model->index(row, ClaimsModel::COL_COINSURANCE)).toDouble();
+    double notCovered   = _model->data(_model->index(row, ExpensesModel::COL_NOT_COVERED)).toDouble();
+    double deductible   = _model->data(_model->index(row, ExpensesModel::COL_DEDUCTIBLE )).toDouble();
+    double coinsurance  = _model->data(_model->index(row, ExpensesModel::COL_COINSURANCE)).toDouble();
     double myResponsibility = notCovered + deductible + coinsurance;
     if (myResponsibility > 0) {
-        _model->setData(_model->index(row, ClaimsModel::COL_MY_RESPONSIBILITY), myResponsibility);
+        _model->setData(_model->index(row, ExpensesModel::COL_MY_RESPONSIBILITY), myResponsibility);
     }
     else
     {
-        double billed        = _model->data(_model->index(row, ClaimsModel::COL_BILLED)).toDouble();
-        double insurancePaid = _model->data(_model->index(row, ClaimsModel::COL_INSURANCE_PAID)).toDouble();
-        _model->setData(_model->index(row, ClaimsModel::COL_MY_RESPONSIBILITY), billed - insurancePaid);
+        double billed        = _model->data(_model->index(row, ExpensesModel::COL_BILLED)).toDouble();
+        double insurancePaid = _model->data(_model->index(row, ExpensesModel::COL_INSURANCE_PAID)).toDouble();
+        _model->setData(_model->index(row, ExpensesModel::COL_MY_RESPONSIBILITY), billed - insurancePaid);
     }
     _model->submit();
 }
@@ -45,16 +45,29 @@ void AutoFillByCopy::apply(int row)
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 AutoFillServiceEnd::AutoFillServiceEnd(QSqlTableModel* model)
-    : AutoFillByCopy (model, ClaimsModel::COL_SERVICE_START, ClaimsModel::COL_SERVICE_END) {}
+    : AutoFillByCopy (model, ExpensesModel::COL_SERVICE_START, ExpensesModel::COL_SERVICE_END) {}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 AutoFillIPaid::AutoFillIPaid(QSqlTableModel* model)
-    : AutoFillByCopy (model, ClaimsModel::COL_MY_RESPONSIBILITY, ClaimsModel::COL_I_PAID) {}
+    : AutoFillByCopy (model, ExpensesModel::COL_MY_RESPONSIBILITY, ExpensesModel::COL_I_PAID) {}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 AutoFillFSA::AutoFillFSA(QSqlTableModel* model)
-    : AutoFillByCopy (model, ClaimsModel::COL_I_PAID, ClaimsModel::COL_FSA_CLAIMED) {}
+    : AutoFillByCopy (model, ExpensesModel::COL_I_PAID, ExpensesModel::COL_FSA_CLAIMED) {}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 AutoFillHSA::AutoFillHSA(QSqlTableModel* model)
-    : AutoFillByCopy (model, ClaimsModel::COL_I_PAID, ClaimsModel::COL_HSA_CLAIMED) {}
+    : AutoFillByCopy (model, ExpensesModel::COL_I_PAID, ExpensesModel::COL_HSA_CLAIMED) {}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
+AutoFillTaxable::AutoFillTaxable(QSqlTableModel* model)
+    : AutoFillRule (model) {}
+
+void AutoFillTaxable::apply(int row)
+{
+    double iPaid    = _model->data(_model->index(row, ExpensesModel::COL_I_PAID)).toDouble();
+    double fsa      = _model->data(_model->index(row, ExpensesModel::COL_FSA_CLAIMED)).toDouble();
+    double hsa      = _model->data(_model->index(row, ExpensesModel::COL_HSA_CLAIMED)).toDouble();
+    _model->setData(_model->index(row, ExpensesModel::COL_TAXABLE), iPaid - fsa - hsa);
+    _model->submit();
+}

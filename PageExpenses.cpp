@@ -1,8 +1,8 @@
-#include "PageClaims.h"
+#include "PageExpenses.h"
 #include "DAO.h"
 #include "DateDelegate.h"
 #include "DlgAttachment.h"
-#include "ClaimsModel.h"
+#include "ExpensesModel.h"
 #include "MyResponsibilityDelegate.h"
 #include "PagePatients.h"
 #include "PageProviders.h"
@@ -17,35 +17,36 @@
 #include <QDebug>
 #include <QMessageBox>
 
-PageClaims::PageClaims(QWidget* parent) :
+PageExpenses::PageExpenses(QWidget* parent) :
     PageDefault(parent)
 {
-    _model = new ClaimsModel(this);
+    _model = new ExpensesModel(this);
     setModel(_model);
 
     ui.tableView->setAcceptDrops(true);
-    ui.tableView->sortByColumn(ClaimsModel::COL_SERVICE_START, Qt::DescendingOrder);
+    ui.tableView->sortByColumn(ExpensesModel::COL_SERVICE_START, Qt::DescendingOrder);
     ui.tableView->getTableHeader()->generateFilters();
     setShowFilter(false);
 
-    ui.tableView->setItemDelegateForColumn(ClaimsModel::COL_PATIENT,        new QSqlRelationalDelegate(ui.tableView));
-    ui.tableView->setItemDelegateForColumn(ClaimsModel::COL_PROVIDER,       new QSqlRelationalDelegate(ui.tableView));
-    ui.tableView->setItemDelegateForColumn(ClaimsModel::COL_SERVICE_START,  new DateDelegate(ui.tableView));
-    ui.tableView->setItemDelegateForColumn(ClaimsModel::COL_SERVICE_END,    new DateDelegate(ui.tableView));
+    ui.tableView->setItemDelegateForColumn(ExpensesModel::COL_PATIENT,        new QSqlRelationalDelegate(ui.tableView));
+    ui.tableView->setItemDelegateForColumn(ExpensesModel::COL_PROVIDER,       new QSqlRelationalDelegate(ui.tableView));
+    ui.tableView->setItemDelegateForColumn(ExpensesModel::COL_SERVICE_START,  new DateDelegate(ui.tableView));
+    ui.tableView->setItemDelegateForColumn(ExpensesModel::COL_SERVICE_END,    new DateDelegate(ui.tableView));
 
     ui.widgetAttachments->show();
 
     connect(ui.tableView, &FilterableTableView::attachmentDropped, ui.widgetAttachments, &WidgetAttachments::onDropAttachment);
-    connect(ui.tableView->getTableHeader(), &FilterTableHeader::filterChanged, this, &PageClaims::onFilterChanged);
+    connect(ui.tableView->getTableHeader(), &FilterTableHeader::filterChanged, this, &PageExpenses::onFilterChanged);
 
-    _autoFillRules.insert(ClaimsModel::COL_MY_RESPONSIBILITY,   new AutoFillMyResponsibility(_model));
-    _autoFillRules.insert(ClaimsModel::COL_SERVICE_END,         new AutoFillServiceEnd(_model));
-    _autoFillRules.insert(ClaimsModel::COL_I_PAID,              new AutoFillIPaid(_model));
-    _autoFillRules.insert(ClaimsModel::COL_FSA_CLAIMED,         new AutoFillFSA(_model));
-    _autoFillRules.insert(ClaimsModel::COL_HSA_CLAIMED,         new AutoFillHSA(_model));
+    _autoFillRules.insert(ExpensesModel::COL_MY_RESPONSIBILITY, new AutoFillMyResponsibility(_model));
+    _autoFillRules.insert(ExpensesModel::COL_SERVICE_END,       new AutoFillServiceEnd(_model));
+    _autoFillRules.insert(ExpensesModel::COL_I_PAID,            new AutoFillIPaid(_model));
+    _autoFillRules.insert(ExpensesModel::COL_FSA_CLAIMED,       new AutoFillFSA(_model));
+    _autoFillRules.insert(ExpensesModel::COL_HSA_CLAIMED,       new AutoFillHSA(_model));
+    _autoFillRules.insert(ExpensesModel::COL_TAXABLE,           new AutoFillTaxable(_model));
 }
 
-void PageClaims::exportData(const QString& fileName)
+void PageExpenses::exportData(const QString& fileName)
 {
     QFile file(fileName);
     if (!file.open(QFile::WriteOnly | QFile::Truncate))
@@ -72,14 +73,14 @@ void PageClaims::exportData(const QString& fileName)
     }
 }
 
-void PageClaims::autoFill()
+void PageExpenses::autoFill()
 {
     foreach (auto index, getSelectedIndexes())
         if (AutoFillRule* autoFill = _autoFillRules[index.column()])
             autoFill->apply(index.row());
 }
 
-void PageClaims::setShowFilter(bool show)
+void PageExpenses::setShowFilter(bool show)
 {
     ui.tableView->setShowFilter(show);
 
@@ -92,15 +93,15 @@ void PageClaims::setShowFilter(bool show)
         _model->setFilter(QString());
 }
 
-void PageClaims::initRow(int row) {
+void PageExpenses::initRow(int row) {
     _model->initRow(row);
 }
 
-void PageClaims::copyRow(int sourceRow, int destinationRow) {
+void PageExpenses::copyRow(int sourceRow, int destinationRow) {
     _model->copyRow(sourceRow, destinationRow);
 }
 
-void PageClaims::onFilterChanged(int column, const QString& filterValue)
+void PageExpenses::onFilterChanged(int column, const QString& filterValue)
 {
     _model->filterData(column, filterValue);
 }
