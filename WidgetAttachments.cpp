@@ -8,12 +8,15 @@
 #include <QMimeData>
 #include <QDirIterator>
 #include <QDebug>
+#include <QMenu>
+#include <QFileDialog>
 
 WidgetAttachments::WidgetAttachments(QWidget *parent) :
     QWidget(parent), _attachmentDir("Attachments"), _emptyDir("Attachments/Empty")
 {
     ui.setupUi(this);
     setAcceptDrops(true);
+    setContextMenuPolicy(Qt::DefaultContextMenu);
 
     QDir::current().mkdir(_attachmentDir);
     QDir::current().mkdir(_emptyDir);
@@ -32,16 +35,16 @@ WidgetAttachments::WidgetAttachments(QWidget *parent) :
             this, &WidgetAttachments::onSelectionChanged);
 }
 
-void WidgetAttachments::setModelID(int claimID)
+void WidgetAttachments::setRecordID(int recordID)
 {
-    _claimID = claimID;
+    _recordID = recordID;
     update();
-    setEnabled(_claimID > -1);
+    setEnabled(_recordID > -1);
 }
 
 void WidgetAttachments::dragEnterEvent(QDragEnterEvent* event)
 {
-    if(event->mimeData()->hasUrls() && _claimID > 0)
+    if(event->mimeData()->hasUrls() && _recordID > 0)
         event->acceptProposedAction();
 }
 
@@ -50,6 +53,24 @@ void WidgetAttachments::dropEvent(QDropEvent* event)
     QUrl url = event->mimeData()->urls().front();
     if (onDropAttachment(url.toLocalFile()))
         event->accept();
+}
+
+void WidgetAttachments::contextMenuEvent(QContextMenuEvent* event)
+{
+    if (_recordID == -1)
+        return;
+
+    QMenu menu;
+    menu.addAction(tr("Add"), this, &WidgetAttachments::onAdd);
+
+    auto selected = ui.listView->selectionModel()->currentIndex();
+    if (selected.isValid())
+    {
+        menu.addAction(tr("Delete"), this, &WidgetAttachments::onDel);
+        menu.addAction(tr("Export"), this, &WidgetAttachments::onExport);
+    }
+
+    menu.exec(event->globalPos());
 }
 
 void WidgetAttachments::onAdd()
@@ -173,6 +194,21 @@ void WidgetAttachments::onSelectionChanged(const QModelIndex& idx) {
     ui.btDel->setEnabled(idx.isValid());
 }
 
+void WidgetAttachments::onExport()
+{
+    auto selected = ui.listView->selectionModel()->currentIndex();
+    if (!selected.isValid())
+        return;
+
+    auto fileName = _model.data(selected).toString();
+    QString sourceFilePath = getAttachmentDir() + QDir::separator() + fileName;
+    QString destinationFilePath = QFileDialog::getSaveFileName(this, tr("Export attachment"),
+                                                               fileName,
+                                                               tr("All files (*.*)"));
+    if (!destinationFilePath.isEmpty())
+        QFile::copy(sourceFilePath, destinationFilePath);
+}
+
 bool WidgetAttachments::onDropAttachment(const QString& filePath)
 {
     DlgAttachment dlg(this);
@@ -186,14 +222,14 @@ bool WidgetAttachments::onDropAttachment(const QString& filePath)
 }
 
 QString WidgetAttachments::getAttachmentDir() const {
-    return _claimID > 0 ? _attachmentDir + QDir::separator() + tr("%1").arg(_claimID)
+    return _recordID > 0 ? _attachmentDir + QDir::separator() + tr("%1").arg(_recordID)
                         : QString();
 }
 
 void WidgetAttachments::update()
 {
     QString dir = getAttachmentDir();
-    if (_claimID == -1 || !QDir(dir).exists())
+    if (_recordID == -1 || !QDir(dir).exists())
     {
         ui.listView->setRootIndex(_model.index(_emptyDir));
         return;

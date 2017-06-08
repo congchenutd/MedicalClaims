@@ -80,6 +80,7 @@
    <addaction name="separator"/>
    <addaction name="actionDuplicate"/>
    <addaction name="actionAutoFill"/>
+   <addaction name="actionClear"/>
    <addaction name="actionFilter"/>
    <addaction name="actionExport"/>
   </widget>
@@ -201,6 +202,18 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+F</string>
+   </property>
+  </action>
+  <action name="actionClear">
+   <property name="icon">
+    <iconset resource="Resources.qrc">
+     <normaloff>:/Images/Clear.png</normaloff>:/Images/Clear.png</iconset>
+   </property>
+   <property name="text">
+    <string>Clear</string>
+   </property>
+   <property name="shortcut">
+    <string>Del</string>
    </property>
   </action>
  </widget>

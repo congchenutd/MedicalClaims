@@ -28,9 +28,10 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui.actionDuplicate, &QAction::triggered, this, &MainWindow::onDuplicate);
     connect(ui.actionAutoFill,  &QAction::triggered, this, &MainWindow::onAutoFill);
     connect(ui.actionFilter,    &QAction::triggered, this, &MainWindow::onFilter);
+    connect(ui.actionClear,     &QAction::triggered, this, &MainWindow::onClearCell);
 
     connect(ui.tabWidget,       &QTabWidget   ::currentChanged,   this, &MainWindow::onCurrentTabChanged);
-    connect(ui.tabExpenses,     &PageExpenses   ::selectionChanged, this, &MainWindow::onSelectionChanged);
+    connect(ui.tabExpenses,     &PageExpenses ::selectionChanged, this, &MainWindow::onSelectionChanged);
     connect(ui.tabPatients,     &PagePatients ::selectionChanged, this, &MainWindow::onSelectionChanged);
     connect(ui.tabProviders,    &PageProviders::selectionChanged, this, &MainWindow::onSelectionChanged);
 }
@@ -117,4 +118,10 @@ void MainWindow::onFilter(bool show)
 {
     if (_currentPage != 0)
         _currentPage->setShowFilter(show);
+}
+
+void MainWindow::onClearCell()
+{
+    if (_currentPage != 0)
+        _currentPage->clearCell();
 }

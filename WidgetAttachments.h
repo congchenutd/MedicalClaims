@@ -12,20 +12,22 @@ class WidgetAttachments : public QWidget
 public:
     explicit WidgetAttachments(QWidget* parent = 0);
 
-    void setModelID(int claimID);
+    void setRecordID(int recordID);
 
 public slots:
     bool onDropAttachment(const QString& filePath);
 
 protected:
-    void dragEnterEvent(QDragEnterEvent*    event);
-    void dropEvent     (QDropEvent*         event);
+    void dragEnterEvent     (QDragEnterEvent*       event);
+    void dropEvent          (QDropEvent*            event);
+    void contextMenuEvent   (QContextMenuEvent*     event);
 
 private slots:
     void onAdd();
     void onDel();
     void onOpen(const QModelIndex& idx);
     void onSelectionChanged(const QModelIndex& idx);
+    void onExport();
 
 private:
     QString getAttachmentDir() const;
@@ -36,7 +38,7 @@ private:
 
 private:
     Ui::WidgetAttachments ui;
-    int                 _claimID;
+    int                 _recordID;
     QFileSystemModel    _model;
     const QString       _attachmentDir;
     const QString       _emptyDir;

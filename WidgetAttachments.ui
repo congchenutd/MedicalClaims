@@ -30,7 +30,11 @@
     <number>0</number>
    </property>
    <item row="0" column="0" colspan="2">
-    <widget class="QListView" name="listView"/>
+    <widget class="QListView" name="listView">
+     <property name="editTriggers">
+      <set>QAbstractItemView::NoEditTriggers</set>
+     </property>
+    </widget>
    </item>
    <item row="1" column="0">
     <widget class="QPushButton" name="btAdd">

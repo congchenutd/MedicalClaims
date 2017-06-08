@@ -19,6 +19,7 @@ public:
     void autoFill();
     void setShowFilter(bool show);
     double sumUpSelected() const;
+    void clearCell();
 
 protected:
     explicit PageDefault(QWidget* parent = 0);

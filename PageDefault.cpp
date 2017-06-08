@@ -93,6 +93,16 @@ double PageDefault::sumUpSelected() const
     return result;
 }
 
+void PageDefault::clearCell()
+{
+    foreach (auto index, getSelectedIndexes())
+        if (index.column() > COL_ID)
+        {
+            _model->setData(index, QVariant());
+            _model->submit();
+        }
+}
+
 void PageDefault::initRow(int row) {
     _model->setData(_model->index(row, COL_ID), DAO::getNextID(_model->tableName()));
 }
@@ -123,8 +133,8 @@ QModelIndexList PageDefault::getSelectedIndexes() const
 void PageDefault::onSelectionChanged()
 {
     auto selected = getSelectedIndexes();
-    _currentRow = selected.isEmpty() ? -1 : selected.front().row();
-    int modelID = selected.isEmpty() ? -1 : _model->data(_model->index(_currentRow, COL_ID)).toInt();
-    ui.widgetAttachments->setModelID(modelID);
+    _currentRow     = selected.isEmpty() ? -1 : selected.front().row();
+    int recordID    = selected.isEmpty() ? -1 : _model->data(_model->index(_currentRow, COL_ID)).toInt();
+    ui.widgetAttachments->setRecordID(recordID);
     emit selectionChanged(selected);
 }

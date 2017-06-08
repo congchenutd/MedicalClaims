@@ -14,5 +14,6 @@
         <file>Images/Paste.png</file>
         <file>Images/AutoFill.png</file>
         <file>Images/Filter.png</file>
+        <file>Images/Clear.png</file>
     </qresource>
 </RCC>

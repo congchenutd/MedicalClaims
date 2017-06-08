@@ -24,6 +24,7 @@ private slots:
     void onDuplicate();
     void onAutoFill();
     void onFilter(bool show);
+    void onClearCell();
 
 private:
     Ui::MainWindow ui;
