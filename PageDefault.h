@@ -18,6 +18,7 @@ public:
     void duplicate();
     void autoFill();
     void setShowFilter(bool show);
+    double sumUp() const;
 
 protected:
     explicit PageDefault(QWidget* parent = 0);
@@ -29,10 +30,10 @@ protected:
     QModelIndexList getSelectedIndexes() const;
 
 private slots:
-    void onSelectionChanged(const QItemSelection& selected);
+    void onSelectionChanged();
 
 signals:
-    void currentRowValid(bool);
+    void selectionChanged(const QModelIndexList selected);
 
 protected:
     Ui::PageDefault ui;

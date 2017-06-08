@@ -18,7 +18,7 @@ private slots:
     void onAdd();
     void onDel();
     void onSave();
-    void onRowSelected(bool selected);
+    void onSelectionChanged(const QModelIndexList& selected);
     void onExport();
     void onAbout();
     void onDuplicate();

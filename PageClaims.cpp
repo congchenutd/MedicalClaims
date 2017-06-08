@@ -35,11 +35,7 @@ PageClaims::PageClaims(QWidget* parent) :
 
     ui.widgetAttachments->show();
 
-    connect(ui.tableView->selectionModel(), &QItemSelectionModel::selectionChanged,
-            this, &PageClaims::onSelectionChanged);
-
     connect(ui.tableView, &FilterableTableView::attachmentDropped, ui.widgetAttachments, &WidgetAttachments::onDropAttachment);
-
     connect(ui.tableView->getTableHeader(), &FilterTableHeader::filterChanged, this, &PageClaims::onFilterChanged);
 
     _autoFillRules.insert(ClaimsModel::COL_MY_RESPONSIBILITY,   new AutoFillMyResponsibility(_model));
@@ -102,12 +98,6 @@ void PageClaims::initRow(int row) {
 
 void PageClaims::copyRow(int sourceRow, int destinationRow) {
     _model->copyRow(sourceRow, destinationRow);
-}
-
-void PageClaims::onSelectionChanged(const QItemSelection& selected)
-{
-    int claimID = selected.isEmpty() ? -1 : _model->data(_model->index(_currentRow, COL_ID)).toInt();
-    ui.widgetAttachments->setClaimID(claimID);
 }
 
 void PageClaims::onFilterChanged(int column, const QString& filterValue)

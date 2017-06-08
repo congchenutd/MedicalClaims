@@ -30,9 +30,9 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui.actionFilter,    &QAction::triggered, this, &MainWindow::onFilter);
 
     connect(ui.tabWidget, &QTabWidget   ::currentChanged,  this, &MainWindow::onCurrentTabChanged);
-    connect(ui.tabClaims, &PageClaims   ::currentRowValid, this, &MainWindow::onRowSelected);
-    connect(ui.tabClaims, &PagePatients ::currentRowValid, this, &MainWindow::onRowSelected);
-    connect(ui.tabClaims, &PageProviders::currentRowValid, this, &MainWindow::onRowSelected);
+    connect(ui.tabClaims, &PageClaims   ::selectionChanged, this, &MainWindow::onSelectionChanged);
+    connect(ui.tabClaims, &PagePatients ::selectionChanged, this, &MainWindow::onSelectionChanged);
+    connect(ui.tabClaims, &PageProviders::selectionChanged, this, &MainWindow::onSelectionChanged);
 }
 
 void MainWindow::onOptions()
@@ -68,12 +68,14 @@ void MainWindow::onSave()
         _currentPage->save();
 }
 
-void MainWindow::onRowSelected(bool selected)
+void MainWindow::onSelectionChanged(const QModelIndexList& selected)
 {
-    ui.actionDel        ->setEnabled(selected);
-    ui.actionExport     ->setEnabled(selected);
-    ui.actionDuplicate  ->setEnabled(selected);
-    ui.actionAutoFill   ->setEnabled(selected);
+    ui.actionDel        ->setEnabled(!selected.isEmpty());
+    ui.actionExport     ->setEnabled(!selected.isEmpty());
+    ui.actionDuplicate  ->setEnabled(!selected.isEmpty());
+    ui.actionAutoFill   ->setEnabled(!selected.isEmpty());
+
+    statusBar()->showMessage(tr("Sum = %1").arg(_currentPage->sumUp()));
 }
 
 void MainWindow::onExport()

@@ -3,6 +3,7 @@
 #include <QDragEnterEvent>
 #include <QMessageBox>
 #include <QSqlError>
+#include <QDebug>
 
 PageDefault::PageDefault(QWidget* parent) :
     Page(parent)
@@ -83,6 +84,14 @@ void PageDefault::autoFill() {}
 
 void PageDefault::setShowFilter(bool) {}
 
+double PageDefault::sumUp() const
+{
+    double result = 0;
+    foreach (auto index, getSelectedIndexes())
+        result += _model->data(index).toDouble();
+    return result;
+}
+
 void PageDefault::initRow(int row) {
     _model->setData(_model->index(row, COL_ID), DAO::getNextID(_model->tableName()));
 }
@@ -110,8 +119,11 @@ QModelIndexList PageDefault::getSelectedIndexes() const
     return result;
 }
 
-void PageDefault::onSelectionChanged(const QItemSelection& selected)
+void PageDefault::onSelectionChanged()
 {
-    _currentRow = selected.isEmpty() ? -1 : selected.indexes().front().row();
-    emit currentRowValid(_currentRow > -1);
+    auto selected = getSelectedIndexes();
+    _currentRow = selected.isEmpty() ? -1 : selected.front().row();
+    int modelID = selected.isEmpty() ? -1 : _model->data(_model->index(_currentRow, COL_ID)).toInt();
+    ui.widgetAttachments->setModelID(modelID);
+    emit selectionChanged(selected);
 }

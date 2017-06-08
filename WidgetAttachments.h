@@ -12,7 +12,7 @@ class WidgetAttachments : public QWidget
 public:
     explicit WidgetAttachments(QWidget* parent = 0);
 
-    void setClaimID(int claimID);
+    void setModelID(int claimID);
 
 public slots:
     bool onDropAttachment(const QString& filePath);

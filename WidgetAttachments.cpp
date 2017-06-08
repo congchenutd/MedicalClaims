@@ -32,7 +32,7 @@ WidgetAttachments::WidgetAttachments(QWidget *parent) :
             this, &WidgetAttachments::onSelectionChanged);
 }
 
-void WidgetAttachments::setClaimID(int claimID)
+void WidgetAttachments::setModelID(int claimID)
 {
     _claimID = claimID;
     update();

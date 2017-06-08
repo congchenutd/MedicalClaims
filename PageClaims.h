@@ -22,7 +22,6 @@ protected:
     void copyRow(int sourceRow, int destinationRow);
 
 private slots:
-    void onSelectionChanged(const QItemSelection& selected);
     void onFilterChanged(int column, const QString& filterValue);
 
 private:
