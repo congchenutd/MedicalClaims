@@ -1,6 +1,7 @@
 #include "DlgOptions.h"
 #include "MainWindow.h"
 #include "Page.h"
+#include "Settings.h"
 #include <QFileDialog>
 #include <QMessageBox>
 
@@ -14,6 +15,9 @@ MainWindow::MainWindow(QWidget *parent) :
     ui.actionExport     ->setEnabled(false);
     ui.actionDuplicate  ->setEnabled(false);
     ui.actionAutoFill   ->setEnabled(false);
+
+    setFont(Settings::getInstance()->getUIFont());
+    ui.tabWidget->setFont(Settings::getInstance()->getTableFont());
 
     connect(ui.actionOptions,   &QAction::triggered, this, &MainWindow::onOptions);
     connect(ui.actionAdd,       &QAction::triggered, this, &MainWindow::onAdd);
@@ -92,7 +96,7 @@ void MainWindow::onAbout()
         tr("<h3><b>Medical Claims: A Medical Claims Manager</b></h3>"
            "<p>Built on %1</p>"
            "<p>Cong Chen &lt;<a href=mailto:CongChenUTD@Gmail.com>CongChenUTD@Gmail.com</a>&gt;</p>")
-                       .arg("06/05/2017"));
+                       .arg("06/08/2017"));
 }
 
 void MainWindow::onDuplicate()

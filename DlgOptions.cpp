@@ -9,8 +9,8 @@ DlgOptions::DlgOptions(QWidget *parent) :
     ui.setupUi(this);
     _settings = Settings::getInstance();
 
-    ui.btTableFont  ->setFont(_settings->getTableFont());
     ui.btUIFont     ->setFont(_settings->getUIFont());
+    ui.btTableFont  ->setFont(_settings->getTableFont());
 
     connect(ui.btTableFont, &QPushButton::clicked, this, &DlgOptions::onTableFont);
     connect(ui.btUIFont,    &QPushButton::clicked, this, &DlgOptions::onUIFont);
