@@ -110,7 +110,5 @@ void MainWindow::onAutoFill()
 void MainWindow::onFilter(bool show)
 {
     if (_currentPage != 0)
-    {
         _currentPage->setShowFilter(show);
-    }
 }

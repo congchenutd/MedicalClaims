@@ -103,3 +103,24 @@ bool ClaimsModel::select()
     relationModel(ClaimsModel::COL_PROVIDER)->select();
     return QSqlRelationalTableModel::select();
 }
+
+void ClaimsModel::filterData(int column, const QString& filter)
+{
+    // clear filter and reset model
+    if (filter.isEmpty())
+    {
+        setFilter(filter);
+        select();
+        return;
+    }
+
+    // the column is a foreign key, relTblAl_x is the alias of the foreign table, where x is the column
+    if (relationModel(column))
+        setFilter(tr("relTblAl_%1.Name LIKE \"%%2%\"")
+                  .arg(column)
+                  .arg(filter));
+    else
+        setFilter(tr("\"%1\" LIKE \"%%2%\"")
+                  .arg(headerData(column, Qt::Horizontal).toString())
+                  .arg(filter));
+}

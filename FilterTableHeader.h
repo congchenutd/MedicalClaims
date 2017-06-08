@@ -14,14 +14,12 @@ class FilterTableHeader : public QHeaderView
 
 public:
     explicit FilterTableHeader(QTableView* parent = 0);
+    void generateFilters();
     virtual QSize sizeHint() const;
     void setShowFilters(bool show);
     
 public slots:
-    void generateFilters();
     void adjustPositions();
-    void clearFilters();
-    void setFilter(int column, const QString& value);
 
 signals:
     void filterChanged(int column, const QString& text);

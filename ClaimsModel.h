@@ -17,6 +17,8 @@ public:
 
     bool select() override;
 
+    void filterData(int column, const QString& filter);
+
 public:
     enum {
         COL_ID, COL_PATIENT, COL_PROVIDER, COL_SERVICE, COL_SERVICE_START, COL_SERVICE_END,

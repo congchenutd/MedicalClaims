@@ -83,12 +83,17 @@ void PageClaims::autoFill()
             autoFill->apply(index.row());
 }
 
-void PageClaims::setShowFilter(bool show) {
+void PageClaims::setShowFilter(bool show)
+{
     ui.tableView->setShowFilter(show);
 
     // UGLY: force layout update to show/hide the filters
     adjustSize();
     layout()->update();
+
+    // clear filter
+    if (!show)
+        _model->setFilter(QString());
 }
 
 void PageClaims::initRow(int row) {
@@ -105,11 +110,7 @@ void PageClaims::onSelectionChanged(const QItemSelection& selected)
     ui.widgetAttachments->setClaimID(claimID);
 }
 
-void PageClaims::onFilterChanged(int column, const QString &filterValue)
+void PageClaims::onFilterChanged(int column, const QString& filterValue)
 {
-    qDebug() << _model->filter();
-    if (filterValue.isEmpty())
-        _model->setFilter(filterValue);
-    else
-        _model->setFilter(tr("\"%1\" LIKE \"%%2%\"").arg(_model->headerData(column, Qt::Horizontal).toString()).arg(filterValue));
+    _model->filterData(column, filterValue);
 }
