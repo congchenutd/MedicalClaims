@@ -34,6 +34,7 @@ void PageDefault::add()
     initRow(lastRow);   // default data
 
     ui.tableView->edit(_model->index(lastRow, COL_ID + 1)); // trigger editting
+    ui.tableView->scrollToBottom();
 }
 
 void PageDefault::del()

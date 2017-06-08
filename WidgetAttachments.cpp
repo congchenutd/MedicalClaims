@@ -95,6 +95,7 @@ void WidgetAttachments::addFile(const QString& title, const QString& sourceFileP
     }
 
     QFile::copy(sourceFilePath, targetFilePath);
+    update();
 }
 
 /**
@@ -150,9 +151,14 @@ void WidgetAttachments::onDel()
     if(QMessageBox::warning(this, "Warning", "Are you sure to delete?",
         QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes)
     {
+        auto dirPath = getAttachmentDir();
         QModelIndex idx = ui.listView->selectionModel()->currentIndex();
         QString filePath = getAttachmentDir() + QDir::separator() + _model.data(idx).toString();
         QFile::remove(filePath);
+
+        // remove empty dir
+        if (QDir(dirPath).entryInfoList(QDir::Files | QDir::NoDotAndDotDot).isEmpty())
+            QDir::current().rmdir(dirPath);
         update();
     }
 }
