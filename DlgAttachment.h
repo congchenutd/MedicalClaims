@@ -20,6 +20,9 @@ public:
 
 private slots:
     void onFilePath();
+    void onEOB();
+    void onInvoice();
+    void onClaim();
 
 private:
     Ui::DlgAttachment ui;
