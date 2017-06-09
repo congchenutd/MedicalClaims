@@ -7,13 +7,26 @@
 #include <QIcon>
 
 ExpensesModel::ExpensesModel(QObject* parent)
-    : QSqlRelationalTableModel(parent)
+    : QSqlRelationalTableModel(parent),
+    _autoFillRules (COL_COUNT, COL_COUNT)
 {
     setTable("Expense");
     setRelation(COL_PATIENT,    QSqlRelation("Patient",  "ID", "Name"));
     setRelation(COL_PROVIDER,   QSqlRelation("Provider", "ID", "Name"));
     setHeaderData(COL_PATIENT,  Qt::Horizontal, tr("Patient"));
     setHeaderData(COL_PROVIDER, Qt::Horizontal, tr("Provider"));
+
+    _autoFillRules.addRule(new AutoFillMyResponsibility (this, COL_BILLED,         COL_MY_RESPONSIBILITY));
+    _autoFillRules.addRule(new AutoFillMyResponsibility (this, COL_INSURANCE_PAID, COL_MY_RESPONSIBILITY));
+    _autoFillRules.addRule(new AutoFillMyResponsibility (this, COL_NOT_COVERED,    COL_MY_RESPONSIBILITY));
+    _autoFillRules.addRule(new AutoFillMyResponsibility (this, COL_DEDUCTIBLE,     COL_MY_RESPONSIBILITY));
+    _autoFillRules.addRule(new AutoFillMyResponsibility (this, COL_COINSURANCE,    COL_MY_RESPONSIBILITY));
+    _autoFillRules.addRule(new AutoFillServiceEnd       (this));
+    _autoFillRules.addRule(new AutoFillIPaid            (this));
+    _autoFillRules.addRule(new AutoFillFSA              (this));
+    _autoFillRules.addRule(new AutoFillHSA              (this));
+    _autoFillRules.addRule(new AutoFillTaxable          (this, COL_FSA_CLAIMED,    COL_TAXABLE));
+    _autoFillRules.addRule(new AutoFillTaxable          (this, COL_HSA_CLAIMED,    COL_TAXABLE));
 }
 
 QVariant ExpensesModel::data(const QModelIndex& idx, int role) const
@@ -123,4 +136,18 @@ void ExpensesModel::filterData(int column, const QString& filter)
         setFilter(tr("\"%1\" LIKE \"%%2%\"")
                   .arg(headerData(column, Qt::Horizontal).toString())
                   .arg(filter));
+}
+
+void ExpensesModel::applyRules(const QModelIndexList& indexes)
+{
+    foreach (auto index, indexes)
+    {
+        auto rules = _autoFillRules.findRulesForDestination(index.column());
+        if (!rules.isEmpty())
+            rules.front()->apply(index.row());
+    }
+}
+
+AutoFillRuleDictionary ExpensesModel::getAutoFillRules() const {
+    return _autoFillRules;
 }

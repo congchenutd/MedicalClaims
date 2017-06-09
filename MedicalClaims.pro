@@ -30,7 +30,9 @@ SOURCES +=\
     FilterTableHeader.cpp \
     FilterLineEdit.cpp \
     PageExpenses.cpp \
-    ExpensesModel.cpp
+    ExpensesModel.cpp \
+    AutoFillItemDelegate.cpp \
+    MyModel.cpp
 
 HEADERS  += MainWindow.h \
     DAO.h \
@@ -49,7 +51,9 @@ HEADERS  += MainWindow.h \
     FilterableTableView.h \
     FilterLineEdit.h \
     PageExpenses.h \
-    ExpensesModel.h
+    ExpensesModel.h \
+    AutoFillItemDelegate.h \
+    MyModel.h
 
 FORMS    += MainWindow.ui \
     PageDefault.ui \

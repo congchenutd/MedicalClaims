@@ -1,6 +1,7 @@
 #ifndef PAGECLAIMS_H
 #define PAGECLAIMS_H
 
+#include "AutoFillRule.h"
 #include "PageDefault.h"
 
 class ExpensesModel;
@@ -26,7 +27,6 @@ private slots:
 
 private:
     ExpensesModel* _model;
-    QMap<int, AutoFillRule*> _autoFillRules;
 };
 
 #endif // PAGECLAIMS_H

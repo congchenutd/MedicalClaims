@@ -1,9 +1,12 @@
 #include "DateDelegate.h"
+#include "ExpensesModel.h"
 #include <QDateEdit>
 
-DateDelegate::DateDelegate(QObject* parent)
-    : QStyledItemDelegate(parent)
-{}
+DateDelegate::DateDelegate(const AutoFillRuleDictionary& autoFillRules, QObject* parent)
+    : AutoFillItemDelegate (autoFillRules, parent)
+{
+
+}
 
 QWidget* DateDelegate::createEditor(QWidget* parent, const QStyleOptionViewItem& option, const QModelIndex& index) const
 {
@@ -31,5 +34,6 @@ void DateDelegate::setModelData(QWidget* editor, QAbstractItemModel* model, cons
     QDate date = dateEdit->date();
     model->setData(index, date.toString("yyyy-MM-dd"));
     model->submit();
-    emit dataCommited();
+
+    AutoFillItemDelegate::setModelData(editor, model, index);
 }

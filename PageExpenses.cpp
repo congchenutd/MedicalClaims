@@ -28,22 +28,23 @@ PageExpenses::PageExpenses(QWidget* parent) :
     ui.tableView->getTableHeader()->generateFilters();
     setShowFilter(false);
 
-    ui.tableView->setItemDelegateForColumn(ExpensesModel::COL_PATIENT,        new QSqlRelationalDelegate(ui.tableView));
-    ui.tableView->setItemDelegateForColumn(ExpensesModel::COL_PROVIDER,       new QSqlRelationalDelegate(ui.tableView));
-    ui.tableView->setItemDelegateForColumn(ExpensesModel::COL_SERVICE_START,  new DateDelegate(ui.tableView));
-    ui.tableView->setItemDelegateForColumn(ExpensesModel::COL_SERVICE_END,    new DateDelegate(ui.tableView));
+    // delegates
+    ui.tableView->setItemDelegateForColumn(ExpensesModel::COL_PATIENT,  new QSqlRelationalDelegate(ui.tableView));
+    ui.tableView->setItemDelegateForColumn(ExpensesModel::COL_PROVIDER, new QSqlRelationalDelegate(ui.tableView));
+
+    // auto fill delegates
+    auto dateDelegate = new DateDelegate(_model->getAutoFillRules(), ui.tableView);
+    ui.tableView->setItemDelegateForColumn(ExpensesModel::COL_SERVICE_START,  dateDelegate);
+    ui.tableView->setItemDelegateForColumn(ExpensesModel::COL_SERVICE_END,    dateDelegate);
+
+    auto autoFillDelegate = new AutoFillItemDelegate(_model->getAutoFillRules(), ui.tableView);
+    for (int col = ExpensesModel::COL_BILLED; col < ExpensesModel::COL_COUNT; ++col)
+        ui.tableView->setItemDelegateForColumn(col, autoFillDelegate);
 
     ui.widgetAttachments->show();
 
     connect(ui.tableView, &FilterableTableView::attachmentDropped, ui.widgetAttachments, &WidgetAttachments::onDropAttachment);
     connect(ui.tableView->getTableHeader(), &FilterTableHeader::filterChanged, this, &PageExpenses::onFilterChanged);
-
-    _autoFillRules.insert(ExpensesModel::COL_MY_RESPONSIBILITY, new AutoFillMyResponsibility(_model));
-    _autoFillRules.insert(ExpensesModel::COL_SERVICE_END,       new AutoFillServiceEnd(_model));
-    _autoFillRules.insert(ExpensesModel::COL_I_PAID,            new AutoFillIPaid(_model));
-    _autoFillRules.insert(ExpensesModel::COL_FSA_CLAIMED,       new AutoFillFSA(_model));
-    _autoFillRules.insert(ExpensesModel::COL_HSA_CLAIMED,       new AutoFillHSA(_model));
-    _autoFillRules.insert(ExpensesModel::COL_TAXABLE,           new AutoFillTaxable(_model));
 }
 
 void PageExpenses::exportData(const QString& fileName)
@@ -75,9 +76,13 @@ void PageExpenses::exportData(const QString& fileName)
 
 void PageExpenses::autoFill()
 {
-    foreach (auto index, getSelectedIndexes())
-        if (AutoFillRule* autoFill = _autoFillRules[index.column()])
-            autoFill->apply(index.row());
+//    foreach (auto index, getSelectedIndexes())
+//    {
+//        auto rules = _autoFillRules.findRulesForDestination(index.column());
+//        if (!rules.isEmpty())
+//            rules.front()->apply(index.row());
+//    }
+    _model->applyRules(getSelectedIndexes());
 }
 
 void PageExpenses::setShowFilter(bool show)

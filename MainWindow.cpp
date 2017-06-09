@@ -15,6 +15,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui.actionExport     ->setEnabled(false);
     ui.actionDuplicate  ->setEnabled(false);
     ui.actionAutoFill   ->setEnabled(false);
+    ui.actionClear      ->setEnabled(false);
 
     setFont(Settings::getInstance()->getUIFont());
     ui.tabWidget->setFont(Settings::getInstance()->getTableFont());
@@ -75,6 +76,7 @@ void MainWindow::onSelectionChanged(const QModelIndexList& selected)
     ui.actionExport     ->setEnabled(!selected.isEmpty());
     ui.actionDuplicate  ->setEnabled(!selected.isEmpty());
     ui.actionAutoFill   ->setEnabled(!selected.isEmpty());
+    ui.actionClear      ->setEnabled(!selected.isEmpty());
 
     statusBar()->showMessage(tr("    Sum = %1").arg(_currentPage->sumUpSelected()));
 }

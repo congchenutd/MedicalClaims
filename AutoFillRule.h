@@ -1,36 +1,39 @@
 #ifndef AUTOFILLRULE_H
 #define AUTOFILLRULE_H
 
+#include <QVector>
+
 class QSqlTableModel;
 
 class AutoFillRule
 {
 public:
-    AutoFillRule(QSqlTableModel* model);
+    AutoFillRule(QSqlTableModel* model, int sourceCol, int destinationCol);
     virtual ~AutoFillRule();
+
+    int getSourceColumn()       const;
+    int getDestinationColumn()  const;
 
     virtual void apply(int row) = 0;
 
 protected:
     QSqlTableModel* _model;
+    int             _sourceCol;
+    int             _destinationCol;
 };
 
 class AutoFillMyResponsibility: public AutoFillRule
 {
 public:
-    AutoFillMyResponsibility(QSqlTableModel* model);
+    AutoFillMyResponsibility(QSqlTableModel* model, int sourceCol, int destinationCol);
     void apply(int row) override;
 };
 
 class AutoFillByCopy: public AutoFillRule
 {
 public:
-    AutoFillByCopy(QSqlTableModel* model, int sourceColumn, int destinationColumn);
+    AutoFillByCopy(QSqlTableModel* model, int sourceCol, int destinationCol);
     void apply(int row) override;
-
-protected:
-    int _sourceColumn;
-    int _destinationColumn;
 };
 
 class AutoFillServiceEnd: public AutoFillByCopy
@@ -60,8 +63,21 @@ public:
 class AutoFillTaxable: public AutoFillRule
 {
 public:
-    AutoFillTaxable(QSqlTableModel* model);
+    AutoFillTaxable(QSqlTableModel* model, int sourceCol, int destinationCol);
     void apply(int row) override;
+};
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
+class AutoFillRuleDictionary
+{
+public:
+    AutoFillRuleDictionary(int rowCount, int columnCount);
+    void addRule(AutoFillRule* rule);
+    QList<AutoFillRule*> findRulesForSource     (int sourceColumn) const;
+    QList<AutoFillRule*> findRulesForDestination(int destinationColumn) const;
+
+private:
+    QVector<QVector<AutoFillRule*>> _rules;
 };
 
 #endif // AUTOFILLRULE_H
