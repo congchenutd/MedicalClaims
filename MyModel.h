@@ -15,8 +15,10 @@ class MyModel : public QSqlRelationalTableModel
 public:
     MyModel(QObject* parent = 0);
 
+    void setTable(const QString& tableName) override;
+
     void initRow(int row);
-    QVariant foreignKeyValue(int row, int col, int foreignCol) const;
+    void resetCell(const QModelIndex& idx);
     void copyRow(int sourceRow, int destinationRow);
     bool select() override;
 
@@ -28,14 +30,15 @@ public slots:
     void filterData(int column, const QString& filter);
 
 protected:
-    static int defaultForeignID(const QString& foreignTableName);
     void initAutoFillRules(int rowCount, int columnCount);
+    QVariant getDefaultValue(int col) const;
 
 public:
     enum {COL_ID};
 
 private:
-    AutoFillRuleDictionary _autoFillRules;
+    AutoFillRuleDictionary  _autoFillRules;
+    QMap<int, QVariant>     _defaultValues;
 };
 
 #endif // MYMODEL_H

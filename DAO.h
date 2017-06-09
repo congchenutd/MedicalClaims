@@ -9,9 +9,8 @@ class DAO: public QObject
 public:
     static DAO* getInstance();
     static int getNextID(const QString& tableName);
-    QList<int> getIDs(const QString &tableName) const;
-    void addAttachment(int claimID, const QString& title, const QString& filePath);
-    QList<QPair<QString, QString>> getAttachments(int claimID) const;
+    QList<int> getIDs(const QString& tableName) const;
+    int getID(const QString& tableName, const QString& fieldName, const QString& value) const;
 
 private:
     DAO();

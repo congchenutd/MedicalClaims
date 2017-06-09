@@ -58,8 +58,9 @@ void DAO::createTables()
                Coinsurance              double,     \
                \'My Responsibility\'    double,     \
                \'I Paid\'               double,     \
-               \'FSA Claimed\'          double,     \
-               \'HSA Claimed\'          double      \
+               \'FSA Paid\'             double,     \
+               \'HSA Paid\'             double,     \
+               Taxable                  double      \
                )");
     query.exec("create table Attachment (   \
                ID               int primary key,    \
@@ -93,28 +94,12 @@ QList<int> DAO::getIDs(const QString& tableName) const
     return result;
 }
 
-void DAO::addAttachment(int claimID, const QString& title, const QString& filePath)
+int DAO::getID(const QString& tableName, const QString& fieldName, const QString& value) const
 {
-    int attachmentID = getNextID("Attachment");
     QSqlQuery query;
-    query.prepare("insert into Attachment values (:id, :title, :filePath)");
-    query.bindValue(":id",          attachmentID);
-    query.bindValue(":title",       title);
-    query.bindValue(":filePath",    filePath);
-    query.exec();
-
-    query.exec(tr("insert into ClaimAttachmentRelation values (%1, %2)")
-               .arg(claimID).arg(attachmentID));
-}
-
-QList<QPair<QString, QString>> DAO::getAttachments(int claimID) const
-{
-    QList<QPair<QString, QString>> result;
-    QSqlQuery query;
-    query.exec(tr("select Title, \"File Path\" from Attachment, ClaimAttachmentRelation \
-                  where Claim.ID = ClaimAttachmentRelation.ClaimID and \
-                  Claim.ID = %1").arg(claimID));
-    while (query.next())
-        result << QPair<QString, QString>(query.value(0).toString(), query.value(1).toString());
-    return result;
+    query.exec(tr("select ID from %1 where \'%2\' == %3")
+               .arg(tableName)
+               .arg(fieldName)
+               .arg(value));
+    return query.next() ? query.value(0).toInt() : -1;
 }

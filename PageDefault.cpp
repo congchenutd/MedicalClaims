@@ -78,8 +78,8 @@ void PageDefault::duplicate()
         _model->insertRow(lastRow);
         initRow(lastRow);
         copyRow(row, lastRow);
+        _model->submit();
     }
-    _model->submit();
 }
 
 void PageDefault::autoFill() {
@@ -101,7 +101,7 @@ void PageDefault::clearCell()
     foreach (auto index, getSelectedIndexes())
         if (index.column() > COL_ID)
         {
-            _model->setData(index, QVariant());
+            _model->resetCell(index);
             _model->submit();
         }
 }

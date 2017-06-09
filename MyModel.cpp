@@ -9,17 +9,48 @@
 MyModel::MyModel(QObject* parent)
     : QSqlRelationalTableModel (parent) {}
 
-/**
- * Find the ID of the first record of a foreign table
- */
-int MyModel::defaultForeignID(const QString& foreignTableName)
+void MyModel::setTable(const QString& tableName)
 {
-    QList<int> foreignIDs = DAO::getInstance()->getIDs(foreignTableName);
-    return foreignIDs.isEmpty() ? 0 : foreignIDs.front();
+    QSqlRelationalTableModel::setTable(tableName);
+
+    // init columns' default values
+    QVariant defaultValue;
+    QSqlQuery query(tr("PRAGMA table_info(%1)").arg(tableName));  // get table schema
+    while (query.next())
+    {
+        auto col        = query.value(0).toInt();
+        auto typeName   = query.value(2).toString();
+        if (col > COL_ID && relationModel(col) == 0)
+        {
+            if (typeName.compare("double", Qt::CaseInsensitive) == 0)
+                defaultValue = 0.0;
+            else if (typeName.compare("date", Qt::CaseInsensitive) == 0)
+                defaultValue = QDate::currentDate().toString("yyyy-MM-dd");
+            _defaultValues.insert(col, defaultValue);
+        }
+    }
 }
 
 void MyModel::initAutoFillRules(int rowCount, int columnCount) {
     _autoFillRules.init(rowCount, columnCount);
+}
+
+QVariant MyModel::getDefaultValue(int col) const
+{
+    if (col == COL_ID)
+        return DAO::getNextID(tableName());
+
+    //  Find the ID of the first record of a foreign table
+    if (auto relationModel = this->relationModel(col))
+    {
+        QList<int> foreignIDs = DAO::getInstance()->getIDs(relationModel->tableName());
+        return foreignIDs.isEmpty() ? 0 : foreignIDs.front();
+    }
+
+    if (_defaultValues.contains(col))
+        return _defaultValues[col];
+
+    return QVariant();
 }
 
 /**
@@ -27,57 +58,14 @@ void MyModel::initAutoFillRules(int rowCount, int columnCount) {
  */
 void MyModel::initRow(int row)
 {
-    setData(index(row, COL_ID), DAO::getNextID(tableName()));
-
-    QVariant data;
-    QSqlQuery query(tr("PRAGMA table_info(%1)").arg(tableName()));  // get table schema
-    while (query.next())
-    {
-        auto col        = query.value(0).toInt();
-        auto typeName   = query.value(2).toString();
-        if (col > COL_ID)
-        {
-            // Set value based on column type
-            if (auto relationModel = this->relationModel(col))
-                data = defaultForeignID(relationModel->tableName());
-            else if (typeName.compare("double", Qt::CaseInsensitive) == 0)
-                data = 0.0;
-            else if (typeName.compare("date", Qt::CaseInsensitive) == 0)
-                data = QDate::currentDate().toString("yyyy-MM-dd");
-            else
-                data = QString();
-            setData(index(row, col), data);
-        }
-    }
+    for (int col = COL_ID; col < columnCount(); ++col)
+        setData(index(row, col), getDefaultValue(col));
 }
 
-/**
- * Find the value of a given foreign key
- * Useful for finding the raw data of a relational model
- * @param row           - row of the table
- * @param col           - column of the table
- * @param foreignCol    - column of the foreign table
- * @return              - value of the foreign cell
- */
-QVariant MyModel::foreignKeyValue(int row, int col, int foreignCol) const
+void MyModel::resetCell(const QModelIndex& idx)
 {
-    QString displayedValue = data(index(row, col)).toString();
-    QSqlTableModel* foreignModel = relationModel(col);
-    if (foreignModel == 0)  // not relational model
-        return displayedValue;
-
-    // Search for the display value in the foreign table
-    QModelIndexList matches = foreignModel->match(foreignModel->index(0, foreignCol),
-                                                  Qt::DisplayRole,
-                                                  displayedValue,
-                                                  1, Qt::MatchExactly | Qt::MatchWrap);
-    if (!matches.isEmpty())
-    {
-        QModelIndex foreignIndex = matches.front();
-        return foreignModel->data(foreignModel->index(foreignIndex.row(), COL_ID)).toInt(); // return foreign ID
-    }
-
-    return displayedValue;
+    if (idx.column() > COL_ID)
+        setData(idx, getDefaultValue(idx.column()));
 }
 
 void MyModel::copyRow(int sourceRow, int destinationRow)
@@ -85,14 +73,16 @@ void MyModel::copyRow(int sourceRow, int destinationRow)
     for (int col = COL_ID + 1; col < columnCount(); ++col)
     {
         auto relation = this->relation(col);
+        auto idx = index(sourceRow, col);
         if (relation.isValid())
         {
-            int foreignCol = relationModel(col)->fieldIndex(relation.displayColumn());
-            int foreignID = foreignKeyValue(sourceRow, col, foreignCol).toInt();
+            int foreignID = DAO::getInstance()->getID(relation.tableName(),
+                                                      relation.displayColumn(),
+                                                      data(idx).toString());
             setData(index(destinationRow, col), foreignID);
         }
         else
-            setData(index(destinationRow, col), data(index(sourceRow, col)));
+            setData(index(destinationRow, col), data(idx));
     }
 }
 

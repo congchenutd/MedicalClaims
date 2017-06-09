@@ -20,16 +20,17 @@ MainWindow::MainWindow(QWidget *parent) :
     setFont(Settings::getInstance()->getUIFont());
     ui.tabWidget->setFont(Settings::getInstance()->getTableFont());
 
-    connect(ui.actionOptions,   &QAction::triggered, this, &MainWindow::onOptions);
-    connect(ui.actionAdd,       &QAction::triggered, this, &MainWindow::onAdd);
-    connect(ui.actionDel,       &QAction::triggered, this, &MainWindow::onDel);
-    connect(ui.actionSave,      &QAction::triggered, this, &MainWindow::onSave);
-    connect(ui.actionExport,    &QAction::triggered, this, &MainWindow::onExport);
-    connect(ui.actionAbout,     &QAction::triggered, this, &MainWindow::onAbout);
-    connect(ui.actionDuplicate, &QAction::triggered, this, &MainWindow::onDuplicate);
-    connect(ui.actionAutoFill,  &QAction::triggered, this, &MainWindow::onAutoFill);
-    connect(ui.actionFilter,    &QAction::triggered, this, &MainWindow::onFilter);
-    connect(ui.actionClear,     &QAction::triggered, this, &MainWindow::onClearCell);
+    connect(ui.actionOptions,   &QAction::triggered,    this, &MainWindow::onOptions);
+    connect(ui.actionAdd,       &QAction::triggered,    this, &MainWindow::onAdd);
+    connect(ui.actionDel,       &QAction::triggered,    this, &MainWindow::onDel);
+    connect(ui.actionSave,      &QAction::triggered,    this, &MainWindow::onSave);
+    connect(ui.actionExport,    &QAction::triggered,    this, &MainWindow::onExport);
+    connect(ui.actionAbout,     &QAction::triggered,    this, &MainWindow::onAbout);
+    connect(ui.actionDuplicate, &QAction::triggered,    this, &MainWindow::onDuplicate);
+    connect(ui.actionAutoFill,  &QAction::triggered,    this, &MainWindow::onAutoFill);
+    connect(ui.actionClear,     &QAction::triggered,    this, &MainWindow::onClearCell);
+    connect(ui.actionFilter,    &QAction::toggled,      this, &MainWindow::onFilter);
+    connect(ui.btEsc,           &QPushButton::clicked,  this, &MainWindow::onESC);
 
     connect(ui.tabWidget,       &QTabWidget   ::currentChanged,   this, &MainWindow::onCurrentTabChanged);
     connect(ui.tabExpenses,     &PageExpenses ::selectionChanged, this, &MainWindow::onSelectionChanged);
@@ -40,8 +41,7 @@ MainWindow::MainWindow(QWidget *parent) :
 void MainWindow::onOptions()
 {
     DlgOptions dlg(this);
-    if (dlg.exec() == QDialog::Accepted)
-    {
+    if (dlg.exec() == QDialog::Accepted) {
         ui.tabWidget->setFont(dlg.getTableFont());
     }
 }
@@ -52,22 +52,16 @@ void MainWindow::onCurrentTabChanged(int index)
     _currentPage->refresh();
 }
 
-void MainWindow::onAdd()
-{
-    if (_currentPage != 0)
-        _currentPage->add();
+void MainWindow::onAdd() {
+    _currentPage->add();
 }
 
-void MainWindow::onDel()
-{
-    if (_currentPage != 0)
-        _currentPage->del();
+void MainWindow::onDel() {
+    _currentPage->del();
 }
 
-void MainWindow::onSave()
-{
-    if (_currentPage != 0)
-        _currentPage->save();
+void MainWindow::onSave() {
+    _currentPage->save();
 }
 
 void MainWindow::onSelectionChanged(const QModelIndexList& selected)
@@ -83,9 +77,6 @@ void MainWindow::onSelectionChanged(const QModelIndexList& selected)
 
 void MainWindow::onExport()
 {
-    if (_currentPage == 0)
-        return;
-
     QString fileName = QFileDialog::getSaveFileName(this, tr("Export to File"),
                                  ".",
                                  tr("Comma-Separated Values (*.csv)"));
@@ -104,26 +95,23 @@ void MainWindow::onAbout()
                        .arg("06/09/2017"));
 }
 
-void MainWindow::onDuplicate()
-{
-    if (_currentPage != 0)
-        _currentPage->duplicate();
+void MainWindow::onDuplicate() {
+    _currentPage->duplicate();
 }
 
-void MainWindow::onAutoFill()
-{
-    if (_currentPage != 0)
-        _currentPage->autoFill();
+void MainWindow::onAutoFill() {
+    _currentPage->autoFill();
 }
 
-void MainWindow::onFilter(bool show)
-{
-    if (_currentPage != 0)
-        _currentPage->setShowFilter(show);
+void MainWindow::onFilter(bool show) {
+    _currentPage->setShowFilter(show);
 }
 
-void MainWindow::onClearCell()
-{
-    if (_currentPage != 0)
-        _currentPage->clearCell();
+void MainWindow::onClearCell() {
+    _currentPage->clearCell();
+}
+
+void MainWindow::onESC() {
+    if (ui.actionFilter->isChecked())
+        ui.actionFilter->toggle();
 }
