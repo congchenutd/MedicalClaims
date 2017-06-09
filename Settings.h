@@ -14,6 +14,9 @@ public:
     QFont getUIFont() const;
     void setUIFont(const QFont& font);
 
+    int getBackupDays() const;
+    void setBackupDays(int nDays);
+
 private:
     void loadDefaults();
     Settings();

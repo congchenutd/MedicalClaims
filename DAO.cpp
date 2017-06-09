@@ -15,7 +15,8 @@ DAO* DAO::_instance = 0;
 
 DAO::DAO()
 {
-    openDB("MedicalClaims.db");
+    extern QString dbFileName;
+    openDB(dbFileName);
     createTables();
 }
 

@@ -6,7 +6,7 @@
 
 QT       += core gui sql widgets
 
-TARGET = MedicalClaims
+TARGET = MedicalExpenses
 TEMPLATE = app
 
 DEFINES += QT_DEPRECATED_WARNINGS

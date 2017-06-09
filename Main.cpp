@@ -15,8 +15,12 @@ QString getCurrentPath()
     return dir.absolutePath();
 }
 
+QString dbFileName;
+
 int main(int argc, char *argv[])
 {
+    dbFileName = "MedicalExpenses.db";
+
     QApplication app(argc, argv);
     app.setAttribute(Qt::AA_UseHighDpiPixmaps);
 

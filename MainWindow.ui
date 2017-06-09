@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Medical Claims</string>
+   <string>Medical Expenses</string>
   </property>
   <property name="windowIcon">
    <iconset resource="Resources.qrc">

@@ -10,7 +10,10 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit MainWindow(QWidget *parent = 0);
+    explicit MainWindow(QWidget* parent = 0);
+
+protected:
+    void closeEvent(QCloseEvent* event);
 
 private slots:
     void onOptions();
@@ -26,6 +29,9 @@ private slots:
     void onFilter(bool show);
     void onClearCell();
     void onESC();
+
+private:
+    void backup();
 
 private:
     Ui::MainWindow ui;

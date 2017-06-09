@@ -4,6 +4,8 @@
 #include "Settings.h"
 #include <QFileDialog>
 #include <QMessageBox>
+#include <QCloseEvent>
+#include <QDate>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent)
@@ -36,6 +38,38 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui.tabExpenses,     &PageExpenses ::selectionChanged, this, &MainWindow::onSelectionChanged);
     connect(ui.tabPatients,     &PagePatients ::selectionChanged, this, &MainWindow::onSelectionChanged);
     connect(ui.tabProviders,    &PageProviders::selectionChanged, this, &MainWindow::onSelectionChanged);
+}
+
+void MainWindow::closeEvent(QCloseEvent* event)
+{
+    backup();
+    event->accept();
+}
+
+void MainWindow::backup()
+{
+    // get all the .db files
+    const QString backupDir = "Backup";
+    QDir::current().mkdir(backupDir);
+    QFileInfoList fileInfos =
+        QDir(backupDir).entryInfoList(QStringList() << "*.db", QDir::Files);
+
+    // for each .db file, remove it if it's older than daysToKeep
+    int daysToKeep = Settings::getInstance()->getBackupDays();
+    foreach(QFileInfo fileInfo, fileInfos)
+    {
+        int age = static_cast<int>(fileInfo.lastModified().date().daysTo(QDate::currentDate()));
+        if(age >= daysToKeep)
+            QFile::remove(fileInfo.filePath());
+    }
+
+    // backup current db
+    if (daysToKeep > 0)
+    {
+        extern QString dbFileName;
+        QString backupFileName = backupDir + "/" + QDateTime::currentDateTime().toString("yyyy-MM-dd hh-mm-ss") + ".db";
+        QFile(dbFileName).copy(backupFileName);
+    }
 }
 
 void MainWindow::onOptions()

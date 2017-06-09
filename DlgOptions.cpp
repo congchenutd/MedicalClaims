@@ -9,8 +9,9 @@ DlgOptions::DlgOptions(QWidget *parent) :
     ui.setupUi(this);
     _settings = Settings::getInstance();
 
-    ui.btUIFont     ->setFont(_settings->getUIFont());
-    ui.btTableFont  ->setFont(_settings->getTableFont());
+    ui.btUIFont     ->setFont   (_settings->getUIFont());
+    ui.btTableFont  ->setFont   (_settings->getTableFont());
+    ui.sbBackupDays ->setValue  (_settings->getBackupDays());
 
     connect(ui.btTableFont, &QPushButton::clicked, this, &DlgOptions::onTableFont);
     connect(ui.btUIFont,    &QPushButton::clicked, this, &DlgOptions::onUIFont);
@@ -20,6 +21,7 @@ void DlgOptions::accept()
 {
     _settings->setTableFont (getTableFont());
     _settings->setUIFont    (getUIFont());
+    _settings->setBackupDays(ui.sbBackupDays->value());
     qApp->setFont(getUIFont());
     QDialog::accept();
 }

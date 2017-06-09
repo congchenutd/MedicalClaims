@@ -40,6 +40,14 @@ void Settings::setUIFont(const QFont& font) {
     setValue("UIFont", font.toString());
 }
 
+int Settings::getBackupDays() const {
+    return value("BackupDays").toInt();
+}
+
+void Settings::setBackupDays(int nDays) {
+    setValue("BackupDays", nDays);
+}
+
 void Settings::loadDefaults()
 {
 
