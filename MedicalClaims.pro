@@ -22,7 +22,6 @@ SOURCES +=\
     DateDelegate.cpp \
     DlgAttachment.cpp \
     WidgetAttachments.cpp \
-    MyResponsibilityDelegate.cpp \
     AutoFillRule.cpp \
     Settings.cpp \
     DlgOptions.cpp \
@@ -43,7 +42,6 @@ HEADERS  += MainWindow.h \
     DateDelegate.h \
     DlgAttachment.h \
     WidgetAttachments.h \
-    MyResponsibilityDelegate.h \
     AutoFillRule.h \
     Settings.h \
     DlgOptions.h \

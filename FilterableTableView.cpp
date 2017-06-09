@@ -3,7 +3,6 @@
 
 #include <QDragEnterEvent>
 #include <QMimeData>
-#include <QLayout>
 
 FilterableTableView::FilterableTableView(QWidget* parent)
     : QTableView (parent)
@@ -38,7 +37,8 @@ void FilterableTableView::dragMoveEvent(QDragMoveEvent* event)
         int row = rowAt(event->pos().y());
         if (-1 < row && row < model()->rowCount())
         {
-            selectionModel()->select(model()->index(row, 0), QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Rows);
+            selectionModel()->select(model()->index(row, 0),
+                                     QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Rows);
             event->accept();
             return;
         }

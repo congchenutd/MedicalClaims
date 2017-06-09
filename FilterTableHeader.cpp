@@ -1,10 +1,8 @@
 #include "FilterTableHeader.h"
 #include "FilterLineEdit.h"
 
-#include <QApplication>
 #include <QTableView>
 #include <QScrollBar>
-#include <QLayout>
 
 FilterTableHeader::FilterTableHeader(QTableView* parent) :
     QHeaderView(Qt::Horizontal, parent)
@@ -13,7 +11,7 @@ FilterTableHeader::FilterTableHeader(QTableView* parent) :
     setSectionsClickable(true);
     setSortIndicatorShown(true);
 
-    // Do some connects: Basically just resize and reposition the input widgets whenever anything changes
+    // Keep filter positions up to date
     connect(this, &FilterTableHeader::sectionResized, this, &FilterTableHeader::adjustPositions);
     connect(parent->horizontalScrollBar(), &QScrollBar::valueChanged, this, &FilterTableHeader::adjustPositions);
 }
@@ -45,7 +43,7 @@ void FilterTableHeader::setShowFilters(bool show)
 
 void FilterTableHeader::updateGeometries()
 {
-    // If there are any input widgets add a viewport margin to the header to generate some empty space for them which is not affected by scrolling
+    // Extra space for the shown filters
     if(_filterLineEdits.size() && _filterLineEdits.front()->isVisible())
         setViewportMargins(0, 0, 0, _filterLineEdits.front()->sizeHint().height());
     else

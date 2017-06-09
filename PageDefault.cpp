@@ -1,5 +1,6 @@
 #include "DAO.h"
 #include "PageDefault.h"
+#include "MyModel.h"
 #include <QDragEnterEvent>
 #include <QMessageBox>
 #include <QSqlError>
@@ -12,7 +13,7 @@ PageDefault::PageDefault(QWidget* parent) :
     ui.widgetAttachments->hide();
 }
 
-void PageDefault::setModel(QSqlTableModel* model)
+void PageDefault::setModel(MyModel* model)
 {
     _model = model;
     _model->select();
@@ -81,7 +82,9 @@ void PageDefault::duplicate()
     _model->submit();
 }
 
-void PageDefault::autoFill() {}
+void PageDefault::autoFill() {
+    _model->autoFill(getSelectedIndexes());
+}
 
 void PageDefault::setShowFilter(bool) {}
 
@@ -104,13 +107,11 @@ void PageDefault::clearCell()
 }
 
 void PageDefault::initRow(int row) {
-    _model->setData(_model->index(row, COL_ID), DAO::getNextID(_model->tableName()));
+    _model->initRow(row);
 }
 
-void PageDefault::copyRow(int sourceRow, int destinationRow)
-{
-    for (int col = COL_ID + 1; col < _model->columnCount(); ++col)
-        _model->setData(_model->index(destinationRow, col), _model->data(_model->index(sourceRow, col)));
+void PageDefault::copyRow(int sourceRow, int destinationRow) {
+    _model->copyRow(sourceRow, destinationRow);
 }
 
 QList<int> PageDefault::getSelectedRows() const

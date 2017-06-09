@@ -18,9 +18,9 @@ public slots:
     bool onDropAttachment(const QString& filePath);
 
 protected:
-    void dragEnterEvent     (QDragEnterEvent*       event);
-    void dropEvent          (QDropEvent*            event);
-    void contextMenuEvent   (QContextMenuEvent*     event);
+    void dragEnterEvent     (QDragEnterEvent*   event);
+    void dropEvent          (QDropEvent*        event);
+    void contextMenuEvent   (QContextMenuEvent* event);
 
 private slots:
     void onAdd();

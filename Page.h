@@ -3,6 +3,9 @@
 
 #include <QWidget>
 
+/**
+ * Interface for the pages
+ */
 class Page: public QWidget
 {
 public:

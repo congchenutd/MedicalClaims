@@ -2,9 +2,11 @@
 #define AUTOFILLITEMDELEGATE_H
 
 #include "AutoFillRule.h"
-
 #include <QStyledItemDelegate>
 
+/**
+ * An item delegate that can apply auto fill rules using the cell as the source
+ */
 class AutoFillItemDelegate : public QStyledItemDelegate
 {
 public:
@@ -18,4 +20,5 @@ private:
 private:
     AutoFillRuleDictionary _autoFillRules;
 };
+
 #endif // AUTOFILLITEMDELEGATE_H

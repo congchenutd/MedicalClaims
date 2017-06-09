@@ -1,7 +1,5 @@
 + Default value
 = On delete, set default
 
-+ Font
-+ Filter
-+ Auto fill on typing
+
 

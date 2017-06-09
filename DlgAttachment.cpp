@@ -5,7 +5,7 @@ DlgAttachment::DlgAttachment(QWidget *parent) :
     QDialog(parent)
 {
     ui.setupUi(this);
-    connect(ui.btFilePath,      &QPushButton::clicked,  this, &DlgAttachment::onFilePath);
+    connect(ui.btFilePath,      &QPushButton ::clicked, this, &DlgAttachment::onFilePath);
     connect(ui.radioEOB,        &QRadioButton::clicked, this, &DlgAttachment::onEOB);
     connect(ui.radioInvoice,    &QRadioButton::clicked, this, &DlgAttachment::onInvoice);
     connect(ui.radioClaim,      &QRadioButton::clicked, this, &DlgAttachment::onClaim);
@@ -27,6 +27,7 @@ void DlgAttachment::setFilePath(const QString& filePath)
 {
     ui.leFilePath->setText(filePath);
 
+    // infer file type from file name
     auto fileName = QFileInfo(filePath).fileName();
     if (fileName.contains("EOB", Qt::CaseInsensitive))
         onEOB();

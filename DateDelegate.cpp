@@ -23,7 +23,7 @@ void DateDelegate::setEditorData(QWidget* editor, const QModelIndex& index) cons
 {
     QDate date = index.model()->data(index).toDate();
     if (!date.isValid())
-        date = QDate::currentDate();
+        date = QDate::currentDate();    // default value
     QDateEdit* dateEdit = qobject_cast<QDateEdit*>(editor);
     dateEdit->setDate(date);
 }

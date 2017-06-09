@@ -6,7 +6,6 @@ FilterLineEdit::FilterLineEdit(int column, QWidget* parent)
     : QLineEdit (parent),
       _column (column)
 {
-
 }
 
 void FilterLineEdit::keyReleaseEvent(QKeyEvent* event)

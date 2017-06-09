@@ -3,6 +3,9 @@
 
 #include <QLineEdit>
 
+/**
+ * A line edit for filting data in a column of an item model
+ */
 class FilterLineEdit : public QLineEdit
 {
     Q_OBJECT

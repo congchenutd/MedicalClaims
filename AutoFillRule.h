@@ -5,6 +5,9 @@
 
 class QSqlTableModel;
 
+/**
+ * A rule for auto filling a destination column
+ */
 class AutoFillRule
 {
 public:
@@ -14,6 +17,7 @@ public:
     int getSourceColumn()       const;
     int getDestinationColumn()  const;
 
+    // Apply the rule to the given row
     virtual void apply(int row) = 0;
 
 protected:
@@ -29,6 +33,9 @@ public:
     void apply(int row) override;
 };
 
+/**
+ * Copy one cell to another
+ */
 class AutoFillByCopy: public AutoFillRule
 {
 public:
@@ -71,7 +78,7 @@ public:
 class AutoFillRuleDictionary
 {
 public:
-    AutoFillRuleDictionary(int rowCount, int columnCount);
+    void init(int rowCount, int columnCount);
     void addRule(AutoFillRule* rule);
     QList<AutoFillRule*> findRulesForSource     (int sourceColumn) const;
     QList<AutoFillRule*> findRulesForDestination(int destinationColumn) const;

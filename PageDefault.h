@@ -3,7 +3,8 @@
 
 #include "Page.h"
 #include "ui_PageDefault.h"
-#include <QSqlTableModel>
+
+class MyModel;
 
 class PageDefault : public Page
 {
@@ -23,9 +24,9 @@ public:
 
 protected:
     explicit PageDefault(QWidget* parent = 0);
-    void setModel(QSqlTableModel* model);
-    virtual void initRow(int row);
-    virtual void copyRow(int sourceRow, int destinationRow);
+    void setModel(MyModel* model);
+    void initRow(int row);
+    void copyRow(int sourceRow, int destinationRow);
 
     QList<int> getSelectedRows() const;
     QModelIndexList getSelectedIndexes() const;
@@ -38,8 +39,8 @@ signals:
 
 protected:
     Ui::PageDefault ui;
-    QSqlTableModel* _model;
-    int             _currentRow;
+    MyModel* _model;
+    int      _currentRow;
 
     enum {COL_ID};
 };

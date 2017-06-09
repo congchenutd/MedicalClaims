@@ -3,7 +3,6 @@
 #include "DateDelegate.h"
 #include "DlgAttachment.h"
 #include "ExpensesModel.h"
-#include "MyResponsibilityDelegate.h"
 #include "PagePatients.h"
 #include "PageProviders.h"
 #include "AutoFillRule.h"
@@ -20,15 +19,14 @@
 PageExpenses::PageExpenses(QWidget* parent) :
     PageDefault(parent)
 {
-    _model = new ExpensesModel(this);
-    setModel(_model);
+    setModel(new ExpensesModel(this));
 
     ui.tableView->setAcceptDrops(true);
     ui.tableView->sortByColumn(ExpensesModel::COL_SERVICE_START, Qt::DescendingOrder);
     ui.tableView->getTableHeader()->generateFilters();
     setShowFilter(false);
 
-    // delegates
+    // relational delegates
     ui.tableView->setItemDelegateForColumn(ExpensesModel::COL_PATIENT,  new QSqlRelationalDelegate(ui.tableView));
     ui.tableView->setItemDelegateForColumn(ExpensesModel::COL_PROVIDER, new QSqlRelationalDelegate(ui.tableView));
 
@@ -44,7 +42,7 @@ PageExpenses::PageExpenses(QWidget* parent) :
     ui.widgetAttachments->show();
 
     connect(ui.tableView, &FilterableTableView::attachmentDropped, ui.widgetAttachments, &WidgetAttachments::onDropAttachment);
-    connect(ui.tableView->getTableHeader(), &FilterTableHeader::filterChanged, this, &PageExpenses::onFilterChanged);
+    connect(ui.tableView->getTableHeader(), &FilterTableHeader::filterChanged, _model, &MyModel::filterData);
 }
 
 void PageExpenses::exportData(const QString& fileName)
@@ -74,17 +72,6 @@ void PageExpenses::exportData(const QString& fileName)
     }
 }
 
-void PageExpenses::autoFill()
-{
-//    foreach (auto index, getSelectedIndexes())
-//    {
-//        auto rules = _autoFillRules.findRulesForDestination(index.column());
-//        if (!rules.isEmpty())
-//            rules.front()->apply(index.row());
-//    }
-    _model->applyRules(getSelectedIndexes());
-}
-
 void PageExpenses::setShowFilter(bool show)
 {
     ui.tableView->setShowFilter(show);
@@ -96,17 +83,4 @@ void PageExpenses::setShowFilter(bool show)
     // clear filter
     if (!show)
         _model->setFilter(QString());
-}
-
-void PageExpenses::initRow(int row) {
-    _model->initRow(row);
-}
-
-void PageExpenses::copyRow(int sourceRow, int destinationRow) {
-    _model->copyRow(sourceRow, destinationRow);
-}
-
-void PageExpenses::onFilterChanged(int column, const QString& filterValue)
-{
-    _model->filterData(column, filterValue);
 }

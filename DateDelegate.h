@@ -3,6 +3,9 @@
 
 #include "AutoFillItemDelegate.h"
 
+/**
+ * An item delegate for showing and editing date
+ */
 class DateDelegate : public AutoFillItemDelegate
 {
 public:

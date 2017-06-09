@@ -3,6 +3,12 @@
 #include <QSqlTableModel>
 #include <QDate>
 
+/**
+ * Auto filling may need multple rules
+ * @param model             - underlying model
+ * @param sourceCol         - source column
+ * @param destinationCol    - destination column
+ */
 AutoFillRule::AutoFillRule(QSqlTableModel* model, int sourceCol, int destinationCol)
     : _model(model),
       _sourceCol(sourceCol),
@@ -30,13 +36,13 @@ void AutoFillMyResponsibility::apply(int row)
     double coinsurance  = _model->data(_model->index(row, ExpensesModel::COL_COINSURANCE)).toDouble();
     double myResponsibility = notCovered + deductible + coinsurance;
     if (myResponsibility > 0) {
-        _model->setData(_model->index(row, ExpensesModel::COL_MY_RESPONSIBILITY), myResponsibility);
+        _model->setData(_model->index(row, getDestinationColumn()), myResponsibility);
     }
     else
     {
-        double billed        = _model->data(_model->index(row, ExpensesModel::COL_BILLED)).toDouble();
-        double insurancePaid = _model->data(_model->index(row, ExpensesModel::COL_INSURANCE_PAID)).toDouble();
-        _model->setData(_model->index(row, ExpensesModel::COL_MY_RESPONSIBILITY), billed - insurancePaid);
+        double billed        = _model->data(_model->index(row, ExpensesModel::COL_BILLED))          .toDouble();
+        double insurancePaid = _model->data(_model->index(row, ExpensesModel::COL_INSURANCE_PAID))  .toDouble();
+        _model->setData(_model->index(row, getDestinationColumn()), billed - insurancePaid);
     }
     _model->submit();
 }
@@ -48,8 +54,8 @@ AutoFillByCopy::AutoFillByCopy(QSqlTableModel* model, int sourceCol, int destina
 
 void AutoFillByCopy::apply(int row)
 {
-    QVariant sourceValue = _model->data(_model->index(row, _sourceCol));
-    _model->setData(_model->index(row, _destinationCol), sourceValue);
+    QVariant sourceValue = _model->data(_model->index(row, getSourceColumn()));
+    _model->setData(_model->index(row, getDestinationColumn()), sourceValue);
     _model->submit();
 }
 
@@ -75,17 +81,16 @@ AutoFillTaxable::AutoFillTaxable(QSqlTableModel* model, int sourceCol, int desti
 
 void AutoFillTaxable::apply(int row)
 {
-    double iPaid    = _model->data(_model->index(row, ExpensesModel::COL_I_PAID)).toDouble();
-    double fsa      = _model->data(_model->index(row, ExpensesModel::COL_FSA_CLAIMED)).toDouble();
-    double hsa      = _model->data(_model->index(row, ExpensesModel::COL_HSA_CLAIMED)).toDouble();
-    _model->setData(_model->index(row, ExpensesModel::COL_TAXABLE), iPaid - fsa - hsa);
+    double iPaid    = _model->data(_model->index(row, ExpensesModel::COL_I_PAID))       .toDouble();
+    double fsa      = _model->data(_model->index(row, ExpensesModel::COL_FSA_CLAIMED))  .toDouble();
+    double hsa      = _model->data(_model->index(row, ExpensesModel::COL_HSA_CLAIMED))  .toDouble();
+    _model->setData(_model->index(row, getDestinationColumn()), iPaid - fsa - hsa);
     _model->submit();
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
-AutoFillRuleDictionary::AutoFillRuleDictionary(int rowCount, int columnCount)
-    : _rules (rowCount, QVector<AutoFillRule*>(columnCount, 0))
-{
+void AutoFillRuleDictionary::init(int rowCount, int columnCount) {
+    _rules.fill(QVector<AutoFillRule*>(columnCount, 0), rowCount);  // a 2D array: [source col, destination col]
 }
 
 void AutoFillRuleDictionary::addRule(AutoFillRule* rule)
@@ -97,6 +102,9 @@ void AutoFillRuleDictionary::addRule(AutoFillRule* rule)
         _rules[sourceColumn][destinationColumn] = rule;
 }
 
+/**
+ * @return - find all rules with a given source column
+ */
 QList<AutoFillRule*> AutoFillRuleDictionary::findRulesForSource(int sourceColumn) const
 {
     QList<AutoFillRule*> result;
@@ -109,6 +117,9 @@ QList<AutoFillRule*> AutoFillRuleDictionary::findRulesForSource(int sourceColumn
     return result;
 }
 
+/**
+ * @return - find all rules for a given destination column
+ */
 QList<AutoFillRule*> AutoFillRuleDictionary::findRulesForDestination(int destinationColumn) const
 {
     QList<AutoFillRule*> result;

@@ -4,14 +4,12 @@ AutoFillItemDelegate::AutoFillItemDelegate(const AutoFillRuleDictionary& autoFil
     : QStyledItemDelegate(parent),
       _autoFillRules (autoFillRules)
 {
-
 }
 
 void AutoFillItemDelegate::setModelData(QWidget* editor, QAbstractItemModel* model, const QModelIndex& index) const
 {
     QStyledItemDelegate::setModelData(editor, model, index);
-
-    applyRules(index.column(), index.row());
+    applyRules(index.column(), index.row());    // auto fill
 }
 
 void AutoFillItemDelegate::applyRules(int sourceCol, int row) const

@@ -4,7 +4,6 @@
 #include <QHeaderView>
 #include <QList>
 
-class QLineEdit;
 class QTableView;
 class FilterLineEdit;
 

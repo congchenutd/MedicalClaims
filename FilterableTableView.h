@@ -5,6 +5,9 @@
 
 class FilterTableHeader;
 
+/**
+ * A table view that supports filtering
+ */
 class FilterableTableView : public QTableView
 {
     Q_OBJECT
