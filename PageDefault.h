@@ -31,6 +31,8 @@ protected:
     QList<int> getSelectedRows() const;
     QModelIndexList getSelectedIndexes() const;
 
+    void keepSorted();
+
 private slots:
     void onSelectionChanged();
 

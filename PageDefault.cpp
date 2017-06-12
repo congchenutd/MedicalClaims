@@ -33,6 +33,7 @@ void PageDefault::add()
     int lastRow = _model->rowCount();
     _model->insertRow(lastRow);
     initRow(lastRow);   // default data
+    _model->submit();
 
     ui.tableView->edit(_model->index(lastRow, COL_ID + 1)); // trigger editting
     ui.tableView->scrollToBottom();
@@ -45,7 +46,7 @@ void PageDefault::del()
     {
         foreach (auto row, getSelectedRows())
             _model->removeRow(row);
-        _model->select();
+        refresh();
     }
 }
 
@@ -72,13 +73,30 @@ void PageDefault::exportData(const QString& fileName) {
 
 void PageDefault::duplicate()
 {
+    QList<int> ids;
     foreach (auto row, getSelectedRows())
     {
         int lastRow = _model->rowCount();
         _model->insertRow(lastRow);
         initRow(lastRow);
         copyRow(row, lastRow);
+        ids << _model->data(_model->index(lastRow, COL_ID)).toInt();
         _model->submit();
+    }
+
+    // sort and highlight duplicated rows
+    keepSorted();
+    ui.tableView->selectionModel()->clear();
+    foreach (auto id, ids)
+    {
+        auto matches = _model->match(_model->index(0, COL_ID), Qt::DisplayRole, id, 1);
+        if (!matches.isEmpty())
+        {
+            auto idx = matches.front();
+            ui.tableView->selectionModel()->select(idx,
+                                                   QItemSelectionModel::Select | QItemSelectionModel::Rows);
+            ui.tableView->scrollTo(idx);
+        }
     }
 }
 
@@ -129,6 +147,11 @@ QModelIndexList PageDefault::getSelectedIndexes() const
     QModelIndexList result = ui.tableView->selectionModel()->selectedIndexes();
     std::sort(result.begin(), result.end());
     return result;
+}
+
+void PageDefault::keepSorted() {
+    ui.tableView->sortByColumn(ui.tableView->horizontalHeader()->sortIndicatorSection(),
+                               ui.tableView->horizontalHeader()->sortIndicatorOrder());
 }
 
 void PageDefault::onSelectionChanged()

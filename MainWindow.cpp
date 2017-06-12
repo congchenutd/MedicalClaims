@@ -126,7 +126,7 @@ void MainWindow::onAbout()
         tr("<h3><b>Medical Claims: A Medical Claims Manager</b></h3>"
            "<p>Built on %1</p>"
            "<p>Cong Chen &lt;<a href=mailto:CongChenUTD@Gmail.com>CongChenUTD@Gmail.com</a>&gt;</p>")
-                       .arg("06/09/2017"));
+                       .arg("06/12/2017"));
 }
 
 void MainWindow::onDuplicate() {

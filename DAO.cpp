@@ -98,7 +98,7 @@ QList<int> DAO::getIDs(const QString& tableName) const
 int DAO::getID(const QString& tableName, const QString& fieldName, const QString& value) const
 {
     QSqlQuery query;
-    query.exec(tr("select ID from %1 where \'%2\' == %3")
+    query.exec(tr("select ID from %1 where \"%2\" = \"%3\"")
                .arg(tableName)
                .arg(fieldName)
                .arg(value));
