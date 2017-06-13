@@ -42,7 +42,7 @@ PageExpenses::PageExpenses(QWidget* parent) :
     ui.widgetAttachments->show();
 
     connect(ui.tableView, &FilterableTableView::attachmentDropped, ui.widgetAttachments, &WidgetAttachments::onDropAttachment);
-    connect(ui.tableView->getTableHeader(), &FilterTableHeader::filterChanged, _model, &MyModel::filterData);
+    connect(ui.tableView->getTableHeader(), &FilterTableHeader::filtersChanged, _model, &MyModel::onFiltersChanged);
 }
 
 void PageExpenses::exportData(const QString& fileName)

@@ -95,25 +95,32 @@ bool MyModel::select()
     return QSqlRelationalTableModel::select();
 }
 
-void MyModel::filterData(int column, const QString& filter)
+void MyModel::onFiltersChanged(const QList<QPair<int, QString> >& filters)
 {
-    // clear filter and reset model
-    if (filter.isEmpty())
+    // reset
+    if (filters.isEmpty())
     {
-        setFilter(filter);
+        setFilter(QString());
         select();
         return;
     }
 
-    // the column is a foreign key, relTblAl_x is the alias of the foreign table, where x is the column
-    if (relationModel(column))
-        setFilter(tr("relTblAl_%1.Name LIKE \"%%2%\"")
-                  .arg(column)
-                  .arg(filter));
-    else
-        setFilter(tr("\"%1\" LIKE \"%%2%\"")
-                  .arg(headerData(column, Qt::Horizontal).toString())
-                  .arg(filter));
+    // combine the filters
+    QStringList sections;
+    foreach (auto filter, filters)
+    {
+        auto column = filter.first;
+        auto value  = filter.second;
+        QString section = relationModel(column) == 0 ? tr("\"%1\" LIKE \"%%2%\"")
+                                                       .arg(headerData(column, Qt::Horizontal).toString())
+                                                       .arg(value)
+                                                     : tr("relTblAl_%1.Name LIKE \"%%2%\"")
+                                                       .arg(column)
+                                                       .arg(value);
+        sections << section;
+    }
+
+    setFilter(sections.join(" and "));
 }
 
 /**

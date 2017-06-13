@@ -17,11 +17,12 @@ public:
     virtual QSize sizeHint() const;
     void setShowFilters(bool show);
     
-public slots:
+private slots:
     void adjustPositions();
+    void onFilterChanged();
 
 signals:
-    void filterChanged(int column, const QString& text);
+    void filtersChanged(const QList<QPair<int, QString>>& filters); // column, filter value
 
 protected:
     virtual void updateGeometries();

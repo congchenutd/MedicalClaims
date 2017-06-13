@@ -21,7 +21,7 @@ void FilterTableHeader::generateFilters()
     for(int i = 0;i < count(); ++i)
     {
         FilterLineEdit* filter = new FilterLineEdit(i, this);
-        connect(filter, &FilterLineEdit::textEdited, this, &FilterTableHeader::filterChanged);
+        connect(filter, &FilterLineEdit::textEdited, this, &FilterTableHeader::onFilterChanged);
         _filterLineEdits << filter;
     }
 }
@@ -66,4 +66,17 @@ void FilterTableHeader::adjustPositions()
         w->move(sectionPosition(i) - offset(), w->sizeHint().height() + 3);
         w->resize(sectionSize(i), w->sizeHint().height());
     }
+}
+
+void FilterTableHeader::onFilterChanged()
+{
+    QList<QPair<int, QString>> filters;
+    for(int i = 0; i < _filterLineEdits.size(); ++i)
+    {
+        auto lineEdit = _filterLineEdits.at(i);
+        if (!lineEdit->text().isEmpty())
+            filters << QPair<int, QString>(i, lineEdit->text());
+    }
+
+    emit filtersChanged(filters);
 }

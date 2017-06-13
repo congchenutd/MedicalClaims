@@ -28,7 +28,7 @@ public:
     bool submit() override;
 
 public slots:
-    void filterData(int column, const QString& filter);
+    void onFiltersChanged(const QList<QPair<int, QString>>& filters);
 
 protected:
     void initAutoFillRules(int rowCount, int columnCount);
