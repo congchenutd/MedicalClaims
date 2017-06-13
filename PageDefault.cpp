@@ -26,6 +26,7 @@ void PageDefault::setModel(MyModel* model)
 
     connect(ui.tableView->selectionModel(), &QItemSelectionModel::selectionChanged,
             this, &PageDefault::onSelectionChanged);
+    connect(_model, &MyModel::dirty, this, &PageDefault::modelDirty);
 }
 
 void PageDefault::add()

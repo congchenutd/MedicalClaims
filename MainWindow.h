@@ -29,6 +29,7 @@ private slots:
     void onFilter(bool show);
     void onClearCell();
     void onESC();
+    void onModelDirty(bool isDirty);
 
 private:
     void backup();
@@ -36,6 +37,7 @@ private:
 private:
     Ui::MainWindow ui;
     Page*   _currentPage;
+    bool    _modelIsDirty;
 };
 
 #endif // MAINWINDOW_H

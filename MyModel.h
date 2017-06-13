@@ -25,6 +25,7 @@ public:
     AutoFillRuleDictionary getAutoFillRules() const;
     void addAutoFillRule(AutoFillRule* rule);
     void autoFill(const QModelIndexList& indexes);
+    bool submit() override;
 
 public slots:
     void filterData(int column, const QString& filter);
@@ -32,6 +33,9 @@ public slots:
 protected:
     void initAutoFillRules(int rowCount, int columnCount);
     QVariant getDefaultValue(int col) const;
+
+signals:
+    void dirty(bool isDirty);
 
 public:
     enum {COL_ID};

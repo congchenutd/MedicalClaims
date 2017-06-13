@@ -38,6 +38,10 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui.tabExpenses,     &PageExpenses ::selectionChanged, this, &MainWindow::onSelectionChanged);
     connect(ui.tabPatients,     &PagePatients ::selectionChanged, this, &MainWindow::onSelectionChanged);
     connect(ui.tabProviders,    &PageProviders::selectionChanged, this, &MainWindow::onSelectionChanged);
+
+    connect(ui.tabExpenses,     &PageExpenses::modelDirty,  this, &MainWindow::onModelDirty);
+    connect(ui.tabPatients,     &PagePatients::modelDirty,  this, &MainWindow::onModelDirty);
+    connect(ui.tabProviders,    &PageProviders::modelDirty, this, &MainWindow::onModelDirty);
 }
 
 void MainWindow::closeEvent(QCloseEvent* event)
@@ -64,7 +68,7 @@ void MainWindow::backup()
     }
 
     // backup current db
-    if (daysToKeep > 0)
+    if (daysToKeep > 0 && _modelIsDirty)
     {
         extern QString dbFileName;
         QString backupFileName = backupDir + "/" + QDateTime::currentDateTime().toString("yyyy-MM-dd hh-mm-ss") + ".db";
@@ -126,7 +130,7 @@ void MainWindow::onAbout()
         tr("<h3><b>Medical Claims: A Medical Claims Manager</b></h3>"
            "<p>Built on %1</p>"
            "<p>Cong Chen &lt;<a href=mailto:CongChenUTD@Gmail.com>CongChenUTD@Gmail.com</a>&gt;</p>")
-                       .arg("06/12/2017"));
+                       .arg("06/13/2017"));
 }
 
 void MainWindow::onDuplicate() {
@@ -148,4 +152,8 @@ void MainWindow::onClearCell() {
 void MainWindow::onESC() {
     if (ui.actionFilter->isChecked())
         ui.actionFilter->toggle();
+}
+
+void MainWindow::onModelDirty(bool isDirty) {
+    _modelIsDirty = isDirty;
 }

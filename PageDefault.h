@@ -38,6 +38,7 @@ private slots:
 
 signals:
     void selectionChanged(const QModelIndexList selected);
+    void modelDirty(bool isDirty);
 
 protected:
     Ui::PageDefault ui;

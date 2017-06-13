@@ -129,6 +129,12 @@ void MyModel::autoFill(const QModelIndexList& indexes)
     }
 }
 
+bool MyModel::submit()
+{
+    emit dirty(isDirty());
+    return QSqlRelationalTableModel::submit();
+}
+
 AutoFillRuleDictionary MyModel::getAutoFillRules() const {
     return _autoFillRules;
 }
