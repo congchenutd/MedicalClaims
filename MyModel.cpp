@@ -142,6 +142,16 @@ bool MyModel::submit()
     return QSqlRelationalTableModel::submit();
 }
 
+void MyModel::applyAutoFillRules(int sourceCol, int row, bool forwarding) const
+{
+    foreach (auto rule, _autoFillRules.findRulesForSource(sourceCol))
+    {
+        rule->apply(row);
+        if (forwarding)
+            applyAutoFillRules(rule->getDestinationColumn(), row, forwarding);  // forward actions to downstream columns
+    }
+}
+
 AutoFillRuleDictionary MyModel::getAutoFillRules() const {
     return _autoFillRules;
 }

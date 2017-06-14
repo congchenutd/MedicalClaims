@@ -55,18 +55,6 @@ public:
     AutoFillIPaid(QSqlTableModel* model);
 };
 
-class AutoFillFSA: public AutoFillByCopy
-{
-public:
-    AutoFillFSA(QSqlTableModel* model);
-};
-
-class AutoFillHSA: public AutoFillByCopy
-{
-public:
-    AutoFillHSA(QSqlTableModel* model);
-};
-
 class AutoFillTaxable: public AutoFillRule
 {
 public:

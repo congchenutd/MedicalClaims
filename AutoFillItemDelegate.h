@@ -4,13 +4,15 @@
 #include "AutoFillRule.h"
 #include <QStyledItemDelegate>
 
+class MyModel;
+
 /**
  * An item delegate that can apply auto fill rules using the cell as the source
  */
 class AutoFillItemDelegate : public QStyledItemDelegate
 {
 public:
-    AutoFillItemDelegate(const AutoFillRuleDictionary& autoFillRules, QObject* parent = 0);
+    AutoFillItemDelegate(MyModel* model, QObject* parent = 0);
 
     void setModelData(QWidget* editor, QAbstractItemModel* model, const QModelIndex& index) const;
 
@@ -18,7 +20,7 @@ private:
     void applyRules(int sourceCol, int row) const;
 
 private:
-    AutoFillRuleDictionary _autoFillRules;
+    MyModel* _model;
 };
 
 #endif // AUTOFILLITEMDELEGATE_H

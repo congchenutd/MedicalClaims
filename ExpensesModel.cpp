@@ -18,9 +18,8 @@ ExpensesModel::ExpensesModel(QObject* parent)
     addAutoFillRule(new AutoFillMyResponsibility (this, COL_DEDUCTIBLE,     COL_MY_RESPONSIBILITY));
     addAutoFillRule(new AutoFillMyResponsibility (this, COL_COINSURANCE,    COL_MY_RESPONSIBILITY));
     addAutoFillRule(new AutoFillServiceEnd       (this));
-    addAutoFillRule(new AutoFillIPaid            (this));
-    addAutoFillRule(new AutoFillFSA              (this));
-    addAutoFillRule(new AutoFillHSA              (this));
+//    addAutoFillRule(new AutoFillIPaid            (this));
+    addAutoFillRule(new AutoFillTaxable          (this, COL_I_PAID,         COL_TAXABLE));
     addAutoFillRule(new AutoFillTaxable          (this, COL_FSA_CLAIMED,    COL_TAXABLE));
     addAutoFillRule(new AutoFillTaxable          (this, COL_HSA_CLAIMED,    COL_TAXABLE));
 }

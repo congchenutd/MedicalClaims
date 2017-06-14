@@ -2,8 +2,8 @@
 #include "ExpensesModel.h"
 #include <QDateEdit>
 
-DateDelegate::DateDelegate(const AutoFillRuleDictionary& autoFillRules, QObject* parent)
-    : AutoFillItemDelegate (autoFillRules, parent)
+DateDelegate::DateDelegate(MyModel* model, QObject* parent)
+    : AutoFillItemDelegate (model, parent)
 {
 
 }

@@ -31,11 +31,11 @@ PageExpenses::PageExpenses(QWidget* parent) :
     ui.tableView->setItemDelegateForColumn(ExpensesModel::COL_PROVIDER, new QSqlRelationalDelegate(ui.tableView));
 
     // auto fill delegates
-    auto dateDelegate = new DateDelegate(_model->getAutoFillRules(), ui.tableView);
+    auto dateDelegate = new DateDelegate(_model, ui.tableView);
     ui.tableView->setItemDelegateForColumn(ExpensesModel::COL_SERVICE_START,  dateDelegate);
     ui.tableView->setItemDelegateForColumn(ExpensesModel::COL_SERVICE_END,    dateDelegate);
 
-    auto autoFillDelegate = new AutoFillItemDelegate(_model->getAutoFillRules(), ui.tableView);
+    auto autoFillDelegate = new AutoFillItemDelegate(_model, ui.tableView);
     for (int col = ExpensesModel::COL_BILLED; col < ExpensesModel::COL_COUNT; ++col)
         ui.tableView->setItemDelegateForColumn(col, autoFillDelegate);
 

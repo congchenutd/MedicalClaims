@@ -68,14 +68,6 @@ AutoFillIPaid::AutoFillIPaid(QSqlTableModel* model)
     : AutoFillByCopy (model, ExpensesModel::COL_MY_RESPONSIBILITY, ExpensesModel::COL_I_PAID) {}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
-AutoFillFSA::AutoFillFSA(QSqlTableModel* model)
-    : AutoFillByCopy (model, ExpensesModel::COL_I_PAID, ExpensesModel::COL_FSA_CLAIMED) {}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-AutoFillHSA::AutoFillHSA(QSqlTableModel* model)
-    : AutoFillByCopy (model, ExpensesModel::COL_I_PAID, ExpensesModel::COL_HSA_CLAIMED) {}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
 AutoFillTaxable::AutoFillTaxable(QSqlTableModel* model, int sourceCol, int destinationCol)
     : AutoFillRule (model, sourceCol, destinationCol) {}
 

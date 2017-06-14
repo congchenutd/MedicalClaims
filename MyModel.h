@@ -27,6 +27,8 @@ public:
     void autoFill(const QModelIndexList& indexes);
     bool submit() override;
 
+    void applyAutoFillRules(int sourceCol, int row, bool forwarding = true) const;
+
 public slots:
     void onFiltersChanged(const QList<QPair<int, QString>>& filters);
 

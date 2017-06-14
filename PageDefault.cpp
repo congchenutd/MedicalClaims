@@ -121,6 +121,7 @@ void PageDefault::clearCell()
         if (index.column() > COL_ID)
         {
             _model->resetCell(index);
+            _model->applyAutoFillRules(index.column(), index.row());
             _model->submit();
         }
 }
