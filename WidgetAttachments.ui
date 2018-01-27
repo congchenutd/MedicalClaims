@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>414</width>
-    <height>311</height>
+    <height>280</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -26,10 +26,14 @@
    <property name="bottomMargin">
     <number>0</number>
    </property>
-   <property name="verticalSpacing">
-    <number>0</number>
-   </property>
-   <item row="0" column="0" colspan="2">
+   <item row="0" column="0">
+    <widget class="QPushButton" name="btAdd">
+     <property name="text">
+      <string>Add</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="1" rowspan="3">
     <widget class="QListView" name="listView">
      <property name="editTriggers">
       <set>QAbstractItemView::NoEditTriggers</set>
@@ -37,18 +41,24 @@
     </widget>
    </item>
    <item row="1" column="0">
-    <widget class="QPushButton" name="btAdd">
+    <widget class="QPushButton" name="btDel">
      <property name="text">
-      <string>+</string>
+      <string>Delete</string>
      </property>
     </widget>
    </item>
-   <item row="1" column="1">
-    <widget class="QPushButton" name="btDel">
-     <property name="text">
-      <string>-</string>
+   <item row="2" column="0">
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
      </property>
-    </widget>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>205</height>
+      </size>
+     </property>
+    </spacer>
    </item>
   </layout>
  </widget>

@@ -30,7 +30,6 @@ int main(int argc, char *argv[])
 
     DAO::getInstance();
     MainWindow mainWindow;
-    mainWindow.resize(1200, 600);
-	mainWindow.show();
+    mainWindow.showMaximized();
     return app.exec();
 }

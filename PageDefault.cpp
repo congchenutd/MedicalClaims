@@ -22,7 +22,7 @@ void PageDefault::setModel(MyModel* model)
     ui.tableView->hideColumn(COL_ID);
     ui.tableView->resizeColumnsToContents();
 
-    ui.splitter->setSizes(QList<int>() << 500 << 100);
+    ui.splitter->setSizes(QList<int>() << 800 << 100);
 
     connect(ui.tableView->selectionModel(), &QItemSelectionModel::selectionChanged,
             this, &PageDefault::onSelectionChanged);
