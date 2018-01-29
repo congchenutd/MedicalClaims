@@ -26,13 +26,7 @@ WidgetAttachments::WidgetAttachments(QWidget *parent) :
     ui.listView->setModel(&_model);
     ui.listView->setRootIndex(_model.index(_emptyDir));
 
-    ui.btDel->setEnabled(false);
-
-    connect(ui.btAdd,       &QPushButton::clicked,      this, &WidgetAttachments::onAdd);
-    connect(ui.btDel,       &QPushButton::clicked,      this, &WidgetAttachments::onDel);
-    connect(ui.listView,    &QListView::doubleClicked,  this, &WidgetAttachments::onOpen);
-    connect(ui.listView->selectionModel(), &QItemSelectionModel::currentChanged,
-            this, &WidgetAttachments::onSelectionChanged);
+    connect(ui.listView, &QListView::doubleClicked, this, &WidgetAttachments::onOpen);
 }
 
 void WidgetAttachments::setRecordID(int recordID)
@@ -190,10 +184,6 @@ void WidgetAttachments::onOpen(const QModelIndex& idx)
     QDesktopServices::openUrl(QUrl::fromLocalFile(filePath));
 }
 
-void WidgetAttachments::onSelectionChanged(const QModelIndex& idx) {
-    ui.btDel->setEnabled(idx.isValid());
-}
-
 void WidgetAttachments::onExport()
 {
     auto selected = ui.listView->selectionModel()->currentIndex();
@@ -223,7 +213,7 @@ bool WidgetAttachments::onDropAttachment(const QString& filePath)
 
 QString WidgetAttachments::getAttachmentDir() const {
     return _recordID > 0 ? _attachmentDir + QDir::separator() + tr("%1").arg(_recordID)
-                        : QString();
+                         : QString();
 }
 
 void WidgetAttachments::update()

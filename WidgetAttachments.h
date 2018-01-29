@@ -26,7 +26,6 @@ private slots:
     void onAdd();
     void onDel();
     void onOpen(const QModelIndex& idx);
-    void onSelectionChanged(const QModelIndex& idx);
     void onExport();
 
 private:

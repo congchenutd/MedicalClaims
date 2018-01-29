@@ -9,3 +9,8 @@ PageProviders::PageProviders(QWidget* parent) :
     setModel(model);
     ui.tableView->sortByColumn(COL_NAME, Qt::AscendingOrder);
 }
+
+void PageProviders::onSwitch()
+{
+    ui.splitterHorizontal->setSizes(QList<int>() << 100 << 0);
+}

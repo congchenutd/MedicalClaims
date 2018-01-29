@@ -14,7 +14,7 @@ public:
     void add();
     void del();
     void save();
-    void refresh();
+    void onSwitch();
     void exportData(const QString& fileName);
     void duplicate();
     void autoFill();
@@ -33,8 +33,8 @@ protected:
 
     void keepSorted();
 
-private slots:
-    void onSelectionChanged();
+protected slots:
+    virtual void onSelectionChanged();
 
 signals:
     void selectionChanged(const QModelIndexList selected);

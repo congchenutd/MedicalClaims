@@ -15,11 +15,16 @@
 #include <QTextStream>
 #include <QDebug>
 #include <QMessageBox>
+#include <QDataWidgetMapper>
 
 PageExpenses::PageExpenses(QWidget* parent) :
     PageDefault(parent)
 {
     setModel(new ExpensesModel(this));
+
+    _mapper = new QDataWidgetMapper(this);
+    _mapper->setModel(_model);
+    _mapper->addMapping(ui.teNotes, ExpensesModel::COL_NOTES);
 
     ui.tableView->setAcceptDrops(true);
     ui.tableView->sortByColumn(ExpensesModel::COL_SERVICE_START, Qt::DescendingOrder);
@@ -39,7 +44,7 @@ PageExpenses::PageExpenses(QWidget* parent) :
     for (int col = ExpensesModel::COL_BILLED; col < ExpensesModel::COL_COUNT; ++col)
         ui.tableView->setItemDelegateForColumn(col, autoFillDelegate);
 
-    ui.widgetAttachments->show();
+    ui.tableView->hideColumn(ExpensesModel::COL_NOTES);
 
     connect(ui.tableView, &FilterableTableView::attachmentDropped, ui.widgetAttachments, &WidgetAttachments::onDropAttachment);
     connect(ui.tableView->getTableHeader(), &FilterTableHeader::filtersChanged, _model, &MyModel::onFiltersChanged);
@@ -83,4 +88,17 @@ void PageExpenses::setShowFilter(bool show)
     // clear filter
     if (!show)
         _model->setFilter(QString());
+}
+
+void PageExpenses::onSelectionChanged()
+{
+    auto selected = getSelectedIndexes();
+    _currentRow     = selected.isEmpty() ? -1 : selected.front().row();
+    int recordID    = selected.isEmpty() ? -1 : _model->data(_model->index(_currentRow, COL_ID)).toInt();
+    ui.widgetAttachments->setRecordID(recordID);
+
+    ui.teNotes->setEnabled(!selected.isEmpty());
+    _mapper->setCurrentIndex(_currentRow);
+
+    PageDefault::onSelectionChanged();
 }

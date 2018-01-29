@@ -87,7 +87,7 @@ void MainWindow::onOptions()
 void MainWindow::onCurrentTabChanged(int index)
 {
     _currentPage = static_cast<Page*>(ui.tabWidget->widget(index));
-    _currentPage->refresh();
+    _currentPage->onSwitch();
 }
 
 void MainWindow::onAdd() {

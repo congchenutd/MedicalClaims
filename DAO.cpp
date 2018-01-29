@@ -61,17 +61,8 @@ void DAO::createTables()
                \'I Paid\'               double,     \
                \'FSA Paid\'             double,     \
                \'HSA Paid\'             double,     \
-               Taxable                  double      \
-               )");
-    query.exec("create table Attachment (   \
-               ID               int primary key,    \
-               Title            varchar,            \
-               \'File Path\'    varchar             \
-               )");
-    query.exec("create table ClaimAttachmentRelation ( \
-               ClaimID        int references Claim        (ID) on delete cascade on update cascade, \
-               AttachmentID   int references Attachment   (ID) on delete cascade on update cascade, \
-               primary key (ClaimID, AttachmentID) \
+               Taxable                  double,     \
+               Notes                    varchar     \
                )");
 }
 

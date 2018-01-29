@@ -10,7 +10,6 @@ PageDefault::PageDefault(QWidget* parent) :
     Page(parent)
 {
     ui.setupUi(this);
-    ui.widgetAttachments->hide();
 }
 
 void PageDefault::setModel(MyModel* model)
@@ -22,7 +21,7 @@ void PageDefault::setModel(MyModel* model)
     ui.tableView->hideColumn(COL_ID);
     ui.tableView->resizeColumnsToContents();
 
-    ui.splitter->setSizes(QList<int>() << 800 << 100);
+    ui.splitterHorizontal->setSizes(QList<int>() << 800 << 100);
 
     connect(ui.tableView->selectionModel(), &QItemSelectionModel::selectionChanged,
             this, &PageDefault::onSelectionChanged);
@@ -47,7 +46,7 @@ void PageDefault::del()
     {
         foreach (auto row, getSelectedRows())
             _model->removeRow(row);
-        refresh();
+        onSwitch();
     }
 }
 
@@ -64,7 +63,7 @@ void PageDefault::save()
     }
 }
 
-void PageDefault::refresh() {
+void PageDefault::onSwitch() {
     _model->select();
 }
 
@@ -158,9 +157,5 @@ void PageDefault::keepSorted() {
 
 void PageDefault::onSelectionChanged()
 {
-    auto selected = getSelectedIndexes();
-    _currentRow     = selected.isEmpty() ? -1 : selected.front().row();
-    int recordID    = selected.isEmpty() ? -1 : _model->data(_model->index(_currentRow, COL_ID)).toInt();
-    ui.widgetAttachments->setRecordID(recordID);
-    emit selectionChanged(selected);
+    emit selectionChanged(ui.tableView->selectionModel()->selectedIndexes());
 }
